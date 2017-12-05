@@ -1,7 +1,9 @@
-from bot import *
-from data import *
+import sys
+sys.path.insert(0, '/home/blade/git/ts_telegram_bot/src')
 import argparse
 import time
+from data import *
+from bot import *
 
 #parser = argparse.ArgumentParser(description="Process come integers")
 #parser.add_argument("-debug",required=False)
@@ -12,4 +14,4 @@ data = Data()
 Bot(data, True)
 
 while 1:
-    time.sleep(1)
+    time.sleep(10)

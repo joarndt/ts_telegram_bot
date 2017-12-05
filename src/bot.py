@@ -1,5 +1,10 @@
 # -*- coding: iso-8859-1 -*-
+import sys
+sys.path.insert(0, '/home/blade/git/ts_telegram_bot/src/tsclient')
+
 from datetime import datetime
+import threading
+import time
 import telepot
 from telepot.loop import MessageLoop
 from tsclient import *

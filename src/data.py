@@ -7,8 +7,9 @@ import pickle
 class Data(object):
 
     # inits data
-    def __init__(self, clean=False):
+    def __init__(self, clean=False, dataPath="data/"):
 
+        self.dataPath = dataPath
         # start with no bot data
         if clean:
             self.botData = dict()
@@ -42,22 +43,22 @@ class Data(object):
 
     # reads user info from file
     def readUserInfo(self):
-        with open("clientInfo.pkl", "rb") as fp:
+        with open(self.dataPath + "clientInfo.pkl", "rb") as fp:
             return pickle.load(fp)
 
     # writes user info into files
     def writeUserInfo(self):
-        with open("clientInfo.pkl", "wb") as fp:
+        with open(self.dataPath + "clientInfo.pkl", "wb") as fp:
             pickle.dump(self.userInfo, fp)
 
     # reads bot data from file
     def readBotData(self):
-        with open("data.pkl", "rb") as fp:
+        with open(self.dataPath + "data.pkl", "rb") as fp:
             return pickle.load(fp)
 
     # write bot data from file
     def writeBotData(self):
-        with open("data.pkl", "wb") as fp:
+        with open(self.dataPath + "data.pkl", "wb") as fp:
             return pickle.dump(self.botData, fp)
 
     # check if its a known user

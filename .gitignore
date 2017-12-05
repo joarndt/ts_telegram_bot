@@ -1,0 +1,9 @@
+# some files to be ignored #
+############################
+
+*.txt
+*.tmp
+*.pyc
+*~
+*.key
+*.pkl
