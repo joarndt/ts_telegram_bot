@@ -1,13 +1,10 @@
 # -*- coding: iso-8859-1 -*-
-import sys
-sys.path.insert(0, '/home/blade/git/ts_telegram_bot/src/tsclient')
-
 from datetime import datetime
 import threading
 import time
 import telepot
 from telepot.loop import MessageLoop
-from tsclient import *
+import tsclient as ts
 
 # Telegram bot class
 
@@ -114,7 +111,7 @@ class Bot(object):
     # init Teamspeak
     def initTeamspeak(self, chatId):
         if not(chatId == "0"):
-            self.teamspeak = Tsclient(
+            self.teamspeak = ts.Tsclient(
                  self.bot, chatId, self.data.getAuth(), self.debug)
         self.groupId = chatId
         self.data.setChatId(chatId)
