@@ -4,7 +4,7 @@ import threading
 import time
 import telepot
 from telepot.loop import MessageLoop
-import tsclient as ts
+import src.tsclient.tsclient as ts
 import logging
 
 # Telegram bot class
