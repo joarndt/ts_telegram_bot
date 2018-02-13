@@ -5,8 +5,11 @@ import time
 import telepot
 from telepot.loop import MessageLoop
 import tsclient as ts
+import logging
 
 # Telegram bot class
+
+logging.basicConfig(filename="../log/bot.log", level=logging.DEBUG)
 
 
 class Bot(object):

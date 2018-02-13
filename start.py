@@ -3,13 +3,24 @@ import time
 import src.data as mydata
 import src.bot as mybot
 
-#parser = argparse.ArgumentParser(description="Process come integers")
-#parser.add_argument("-debug",required=False)
-#parser.parse_args()
 
+# Argument parser
+parser = argparse.ArgumentParser()
+parser.add_argument("-d",
+                    "--debug",
+                    required=False,
+                    help="enables debugging functionality",
+                    action="store_true")
+parser.add_argument("-c",
+                    "--clean",
+                    required=False,
+                    help="overwrites all existing files with new ones",
+                    action="store_true")
+args = parser.parse_args()
 
-data = mydata.Data()
-mybot.Bot(data, True)
+#init bot
+data = mydata.Data(args.clean)
+mybot.Bot(data, args.debug)
 
 while 1:
     time.sleep(10)
