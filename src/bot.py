@@ -121,7 +121,7 @@ class Bot(object):
 
     # write message into Telegram chat
     def writeTelegram(self, string):
-        self.bot.sendMessage(self.groupId, string, 'Markdown')
+        self.bot.sendMessage(self.groupId, string)
 
     # thread for keeping the connection
     def __keepAliveThread(self):

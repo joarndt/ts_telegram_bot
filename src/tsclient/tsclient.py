@@ -1,4 +1,4 @@
-
+# -*- coding: iso-8859-1 -*-
 import subprocess
 import threading
 from subprocess import call
@@ -180,6 +180,7 @@ class Tsclient(object):
         self.tsClients.clear()
         self.tsClients = clients
 
+        print msg
         if not self.quiet:
             self.writeTelegram(msg)
         else:
@@ -217,4 +218,4 @@ class Tsclient(object):
 
     # write
     def writeTelegram(self, string):
-        self.bot.sendMessage(self.groupId, string, 'Markdown')
+        self.bot.sendMessage(self.groupId, string)
