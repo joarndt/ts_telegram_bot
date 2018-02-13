@@ -9,7 +9,7 @@ import logging
 
 # Telegram bot class
 
-logging.basicConfig(filename="../log/bot.log", level=logging.DEBUG)
+logging.basicConfig(filename="log/bot.log", level=logging.DEBUG)
 
 
 class Bot(object):
