@@ -103,9 +103,9 @@ class Bot(object):
 
                     message = ""
                     for text in msg['text'].split("\U000"):
-                        print text
+                        self.logger.debug(text)
                         message += text[5:]
-                        
+
                     if message.split(" ") != "":
                         self.teamspeak.writeTeamspeak(
                             self.userFormat
