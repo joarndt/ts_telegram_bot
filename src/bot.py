@@ -103,15 +103,17 @@ class Bot(object):
 
                     message = ""
                     for text in msg['text'].split("\U000"):
+                        print text
                         message += text[5:]
-
-                    self.teamspeak.writeTeamspeak(
-                        self.userFormat
-                        + self.getUsernameWithColor(msg)
-                        + ': '
-                        + self.chatFormat
-                        + message
-                    )
+                        
+                    if message.split(" ") != "":
+                        self.teamspeak.writeTeamspeak(
+                            self.userFormat
+                            + self.getUsernameWithColor(msg)
+                            + ': '
+                            + self.chatFormat
+                            + message
+                        )
 
 #           else:
 #               writeTelegram('bot is not in Teamspeak')
