@@ -100,13 +100,13 @@ class Bot(object):
 
                 # builds textmessages and writes it into teamspeakchat
                 else:
-                    
+
                     messages = msg['text'].split("\U000")
                     message = messages[0]
                     for text in messages[1:]:
                             message += text[5:]
 
-                    if message.split(" ") != "":
+                    if message.replace(" ", "") != "":
                         self.teamspeak.writeTeamspeak(
                             self.userFormat
                             + self.getUsernameWithColor(msg)
