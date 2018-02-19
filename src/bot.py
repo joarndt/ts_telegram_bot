@@ -20,6 +20,7 @@ class Bot(object):
         # data and debugging
         self.debug = debug
         self.data = data
+        self.logger = logging.getLogger('telegram.bot')
 
         # Ts Chat Format
         self.userFormat = "[b]"
@@ -56,15 +57,14 @@ class Bot(object):
             full_command = msg['text'].split(' ')
 
             # debug output
-            if self.debug: print msg
-            print 'Got command: %s' % command
+            self.logger.info(msg)
 
             if self.groupId == "0":
                 self.initTeamspeak(chat_id)
 
             # do nothing for now
             elif chat_id != self.groupId:
-                print "do nothing for now"
+                self.logger.debug("not implemented yet")
 
             # quitting teamspeak
             elif command == '/quit':

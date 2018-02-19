@@ -143,6 +143,7 @@ class Tsclient(object):
 
     # quits if bot is alone on the server
     def autoQuit(self):
+        print "autoquit"
         if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.tsRunning:
             self.tsQuit()
 
