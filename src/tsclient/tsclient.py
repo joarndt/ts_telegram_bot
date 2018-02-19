@@ -1,5 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 import subprocess
+import logging
 import threading
 from subprocess import call
 import time
@@ -19,6 +20,7 @@ class Tsclient(object):
         self.auth = auth
         self.bot = bot
         self.groupId = groupId
+        self.logger = logging.getLogger('teamspeak3.handler')
 
         # empty clientlist
         self.tsClients = dict()
@@ -45,12 +47,12 @@ class Tsclient(object):
                 # get teamspeak clientquery messages
                 messages = self.client.get_messages()
                 for message in messages:
-                    if self.debug: print message
+                    self.logger.info(message)
 
                     # outputs teamspeakchat in telegram group
                     if message.command == 'notifytextmessage':
                         if self.listen and message['invokerid'] != self.invokerid:
-                            msg = "_*" + message['invokername'] + ':*_\n' + message['msg']
+                            msg = message['invokername'] + ':\n' + message['msg']
                             msg = msg.replace("[URL]", "").replace("[/URL]", "")
                             self.writeTelegram(msg)
 
@@ -98,14 +100,14 @@ class Tsclient(object):
 
         # if Teamspeak is already running
         if self.tsRunning:
-            self.writeTelegram("_*already in Teamspeak*_")
+            self.writeTelegram("already in Teamspeak")
 
         # some output for Telegram
-        self.writeTelegram("_*joining Teamspeak*_")
+        self.writeTelegram("joining Teamspeak")
 
         # starts Teamspeak
         subprocess.Popen(["ts3"], stdout=subprocess.PIPE)
-        time.sleep(20)
+        time.sleep(30)
 
         # initiate Clientquery connection
         client = Client(self.auth)
@@ -121,11 +123,11 @@ class Tsclient(object):
     def tsStop(self):
 
         if not self.tsRunning:
-            self.writeTelegram("_*not in Teamspeak*_")
+            self.writeTelegram("not in Teamspeak")
             return
 
         # some output for Telegram
-        self.writeTelegram("_*quitting Teamspeak*_")
+        self.writeTelegram("quitting Teamspeak")
 
         # close connection and quit Teamspeak
         self.setTsRunning(False)
@@ -139,11 +141,11 @@ class Tsclient(object):
         if self.tsRunning:
             self.tsStop()
         else:
-            self.writeTelegram('_*Not in Teamspeak*_')
+            self.writeTelegram('Not in Teamspeak')
 
     # quits if bot is alone on the server
     def autoQuit(self):
-        print "autoquit"
+        self.logger.info("autoquit")
         if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.tsRunning:
             self.tsQuit()
 
@@ -163,13 +165,13 @@ class Tsclient(object):
         clients = dict()
 
         # build message for status and appends these Clients to list
-        msg = '_*Currently Online:*_'
+        msg = 'Currently Online:'
         for part in message.responses:
             if 'client_nickname' in part.keys() and 'clid' in part.keys():
 
                 # get new user if somebody joined
                 if part['clid'] not in self.tsClients and self.tsClients.__len__() > 0:
-                    self.writeTelegram("_*" + part['client_nickname'] + " joined Teamspeak*_")
+                    self.writeTelegram(part['client_nickname'] + " joined Teamspeak")
 
                 # build dictionary
                 clients[part['clid']] = part['client_nickname']
@@ -190,15 +192,15 @@ class Tsclient(object):
     # clientLeft message and deletes the leaving client from tsclients
     def clientLeft(self, uid):
         if uid in self.tsClients:
-            self.writeTelegram("_*" + self.tsClients[uid] + " left Teamspeak*_")
+            self.writeTelegram(self.tsClients[uid] + " left Teamspeak")
             del self.tsClients[uid]
         else:
-            self.writeTelegram("_*BIade ffs fix me*_")
+            self.writeTelegram("BIade ffs fix me")
 
     # client joined message and adds the joined client to tsclients
     def clientJoined(self, uid, nickname):
         self.tsClients[uid] = nickname
-        self.writeTelegram("_*" + nickname + " joined Teamspeak*_")
+        self.writeTelegram(nickname + " joined Teamspeak")
 
     # returns tsRunning variable
     def getTsRunning(self):

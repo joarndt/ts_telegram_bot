@@ -83,12 +83,12 @@ class Bot(object):
                 # unlisten from teamspeakchat
                 elif command == '/stfu':
                     self.teamspeak.setListen(False)
-                    self.writeTelegram('_*stopped listening to TS3 Chat*_')
+                    self.writeTelegram('stopped listening to TS3 Chat')
 
                 # listen to teamspeakchat
                 elif command == '/listen':
                     self.teamspeak.setListen(True)
-                    self.writeTelegram('_*started listening to TS3 Chat*_')
+                    self.writeTelegram('started listening to TS3 Chat')
 
                 # set username for current id
                 elif command.split(" ")[0] == '/setusername':
@@ -100,12 +100,17 @@ class Bot(object):
 
                 # builds textmessages and writes it into teamspeakchat
                 else:
+
+                    message = ""
+                    for text in msg['text'].split("\U000"):
+                        message += text[5:]
+
                     self.teamspeak.writeTeamspeak(
                         self.userFormat
                         + self.getUsernameWithColor(msg)
                         + ': '
                         + self.chatFormat
-                        + msg['text']
+                        + message
                     )
 
 #           else:
@@ -154,7 +159,7 @@ class Bot(object):
     def setUsername(self, user_id, command):
         if command.__len__() == 2:
             self.data.setUsername(user_id, command[1])
-            self.writeTelegram("_*Username set*_")
+            self.writeTelegram("Username set")
         else:
             self.writeTelegram(
                 "only use following syntax: /setusername USERNAME")
@@ -164,10 +169,10 @@ class Bot(object):
         if command.__len__() == 2:
             if self.data.setUsercolor(user_id, command[
                               1], self.getUsername(msg)):
-                self.writeTelegram("_*Usercolor set*_")
+                self.writeTelegram("Usercolor set")
         else:
             self.writeTelegram(
-                "_*only use following syntax:*_ /setusercolor ffffff")
+                "only use following syntax: /setusercolor ffffff")
 
     # gets username from msg with color
     def getUsernameWithColor(self, msg):
