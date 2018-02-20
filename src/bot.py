@@ -65,15 +65,19 @@ class Bot(object):
 
             # do nothing for now
             elif chat_id != self.groupId:
-                message= ""
+                message = ""
 
                 for x in msg['text'].split(' '):
+
+                    send = False
                     if "i.imgur.com" in x:
+                        send = True
                         message += x.replace(".gifv", ".mp4") + " "
                     else:
                         message += x + " "
 
-                self.bot.sendMessage(chat_id, message)
+                if send:
+                    self.bot.sendMessage(chat_id, message)
 
             # quitting teamspeak
             elif command == '/quit':
