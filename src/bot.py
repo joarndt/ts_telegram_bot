@@ -133,12 +133,15 @@ class Bot(object):
     # thread for keeping the connection
     def __keepAliveThread(self):
         while True:
-            self.bot.getMe()
-            x = datetime.today()
-            print x
-            if not(self.groupId == "0"):
-                self.teamspeak.autoQuit()
-            time.sleep(60)
+            try:
+                self.bot.getMe()
+                x = datetime.today()
+                print x
+                if not(self.groupId == "0"):
+                    self.teamspeak.autoQuit()
+                time.sleep(60)
+            except Exception:
+                self.logger.debug("Thread wanted to die")
 
     # builds a Thread for keeping the connection alive
     def keepAlive(self):
