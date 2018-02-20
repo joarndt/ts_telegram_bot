@@ -112,7 +112,7 @@ class Bot(object):
                             + self.getUsernameWithColor(msg)
                             + ': '
                             + self.chatFormat
-                            + message
+                            + message.decode('unicode-escape')
                         )
 
 #           else:
