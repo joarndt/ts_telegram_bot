@@ -104,7 +104,7 @@ class Bot(object):
 
                     #regex for filtering unicode smileys
                     regex = re.compile('[\W][U][0][0][0][0-f][0-f][0-f][0-f][0-f]')
-                    message = regex.sub('', msg['text'])
+                    message = regex.sub('', str(msg['text']))
 
                     if message.replace(" ", "") != "":
                         self.teamspeak.writeTeamspeak(
