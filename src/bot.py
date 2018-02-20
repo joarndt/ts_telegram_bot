@@ -66,10 +66,8 @@ class Bot(object):
             # do nothing for now
             elif chat_id != self.groupId:
                 message = ""
-
+                send = False
                 for x in msg['text'].split(' '):
-
-                    send = False
                     if "i.imgur.com" in x:
                         send = True
                         message += x.replace(".gifv", ".mp4") + " "
