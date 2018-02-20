@@ -73,7 +73,7 @@ class Bot(object):
                     else:
                         message += x + " "
 
-                self.bot.sendMessage(self.chat_id, message)
+                self.bot.sendMessage(chat_id, message)
 
             # quitting teamspeak
             elif command == '/quit':
