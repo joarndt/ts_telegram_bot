@@ -2,6 +2,7 @@
 from datetime import datetime
 import threading
 import time
+import re
 import telepot
 from telepot.loop import MessageLoop
 import src.tsclient.tsclient as ts
@@ -101,10 +102,9 @@ class Bot(object):
                 # builds textmessages and writes it into teamspeakchat
                 else:
 
-
-                    message = ""
-                    for text in msg['text'].split("\U000"):
-                        if text.__len__() > 4: message += text[5:]
+                    #regex for filtering unicode smileys
+                    regex = re.compile('[\W][U][0][0][0][0-f][0-f][0-f][0-f][0-f]')
+                    message = regex.sub('', msg['tex'])
 
                     if message.replace(" ", "") != "":
                         self.teamspeak.writeTeamspeak(
