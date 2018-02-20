@@ -135,11 +135,13 @@ class Bot(object):
         while True:
             try:
                 self.bot.getMe()
-                x = datetime.today()
-                print x
-                if not(self.groupId == "0"):
+                if not(self.groupId == "0") and datetime.today().hour < 18:
                     self.teamspeak.autoQuit()
                 time.sleep(60)
+
+                if datetime.today().hour >= 18 and not self.teamspeak.getTsRunning():
+                    self.teamspeak.tsStart()
+
             except Exception:
                 self.logger.debug("Thread wanted to die")
 
