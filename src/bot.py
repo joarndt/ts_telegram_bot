@@ -73,17 +73,13 @@ class Bot(object):
                         send = True
                         message += x.replace(".gifv", ".mp4") + " "
                     elif "redd.it" in x or "reddit.com" in x:
-                        try:
-                            response = urllib2.urlopen(x)
-                            page_source = response.read()
-
-                            regex = re.compile('data-seek-preview.*DASH_600_K')
-                            strings = regex.findall(page_source)
-                            if strings.__len__() > 0:
-                                send = True
-                                message += strings[0][23:] + " "
-                        except Exception:
-                            self.logger.debug(Exception)
+                        message += self.parseUrl('data-seek-preview.*DASH_600_K', 23)
+                        if message != "":
+                            send = True
+                    elif "gfycat.com" in x:
+                        message += self.parseUrl('og:video:secure_url.*-mobile.mp4', 30)
+                        if message != "":
+                            send = True
                     else:
                         message += x + " "
 
@@ -210,3 +206,15 @@ class Bot(object):
         if 'id' in msg['from'] and self.data.isUser(msg['from']['id']):
             return self.data.getUsercolor(msg['from']['id']) + self.getUsername(msg)
         return self.getUsername(msg)
+
+    def parseUrl(regex, cut):
+        try:
+            regex = re.compile(regex)
+            strings = regex.findall(urllib2.urlopen(x).read())
+            if strings.__len__() > 0:
+                return strings[0][cut:] + " "
+        except Exception:
+            self.logger.debug(Exception)
+
+        return ""
+
