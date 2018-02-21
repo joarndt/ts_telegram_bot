@@ -2,6 +2,7 @@
 from datetime import datetime
 import threading
 import time
+import urllib2
 import re
 import telepot
 from telepot.loop import MessageLoop
@@ -71,6 +72,18 @@ class Bot(object):
                     if "i.imgur.com" in x:
                         send = True
                         message += x.replace(".gifv", ".mp4") + " "
+                    elif "redd.it" in x or "reddit.com" in x:
+                        try:
+                            response = urllib2.urlopen(x)
+                            page_source = response.read()
+
+                            regex = re.compile('data-seek-preview.*DASH_600_K')
+                            strings = regex.findall(page_source)
+                            if strings.__len__() > 0:
+                                send = True
+                            message += strings[0][23:]
+                        except Exception:
+                            self.logger.debug(Exception)
                     else:
                         message += x + " "
 
