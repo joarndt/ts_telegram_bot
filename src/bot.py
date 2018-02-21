@@ -81,7 +81,7 @@ class Bot(object):
                             strings = regex.findall(page_source)
                             if strings.__len__() > 0:
                                 send = True
-                            message += strings[0][23:]
+                            message += strings[0][23:] + " "
                         except Exception:
                             self.logger.debug(Exception)
                     else:
