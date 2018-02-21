@@ -207,7 +207,7 @@ class Bot(object):
             return self.data.getUsercolor(msg['from']['id']) + self.getUsername(msg)
         return self.getUsername(msg)
 
-    def parseUrl(regex, cut):
+    def parseUrl(self, regex, cut):
         try:
             regex = re.compile(regex)
             strings = regex.findall(urllib2.urlopen(x).read())
