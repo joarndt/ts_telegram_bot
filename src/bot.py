@@ -79,7 +79,7 @@ class Bot(object):
                 self.bot.sendMessage(chat_id, "Other chat set")
 
             elif chat_id == self.adminId:
-                self.writeTelegram()
+                self.writeTelegram(self.otherId, msg['text'])
 
             # Handle other chats
             elif chat_id == self.otherId:
@@ -105,7 +105,7 @@ class Bot(object):
 
             elif self.groupId != chat_id:
                 print "different chat yo"
-                
+
             # quitting teamspeak
             elif command == '/quit':
                 self.teamspeak.tsQuit()
