@@ -80,6 +80,23 @@ class Bot(object):
 
             elif chat_id == self.adminId:
                 self.bot.sendMessage(self.otherId, msg['text'])
+                if command == '/getStickerSet':
+                    if full_command.__len__() == 2:
+                        stickers = self.bot.getStickerSet(full_command[1])
+                        print stickers
+                        
+                        for x in stickers:
+                            self.bot.sendSticker(x)
+                    else:
+                        self.bot.sendMessage(chat_id, "only use following syntax: /setStickerSet NAMEOFSET")
+                if command == '/sendStickerSet':
+                    if full_command.__len__() == 2:
+                        #self.bot.sendSticker(chat_id, )
+                        print "nothing for now"
+                    else:
+                        self.bot.sendMessage(chat_id, "only use following syntax: /sendSticker Sticker")
+
+
 
             # Handle other chats
             elif chat_id == self.otherId:
