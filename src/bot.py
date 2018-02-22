@@ -79,7 +79,7 @@ class Bot(object):
                 self.bot.sendMessage(chat_id, "Other chat set")
 
             elif chat_id == self.adminId:
-                self.writeTelegram(self.otherId, msg['text'])
+                self.bot.sendMessage(self.otherId, msg['text'])
 
             # Handle other chats
             elif chat_id == self.otherId:
