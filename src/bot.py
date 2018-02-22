@@ -81,9 +81,9 @@ class Bot(object):
             elif chat_id == self.adminId:
                 if command == '/getStickerSet':
                     if full_command.__len__() == 2:
+                        print "adding Sticker"
                         stickers = self.bot.getStickerSet(full_command[1])
                         print stickers
-
                         for x in stickers:
                             self.bot.sendSticker(chat_id, x)
                     else:
