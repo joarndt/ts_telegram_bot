@@ -83,8 +83,8 @@ class Bot(object):
                     if full_command.__len__() == 2:
                         stickers = self.bot.getStickerSet(full_command[1])
                         print stickers
-                        for x in stickers['stickers']:
-                            self.bot.sendSticker(chat_id, x)
+
+                        self.bot.sendSticker(chat_id, stickers['stickers'][0])
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /setStickerSet NAMEOFSET")
                 elif command.split(" ")[0] == '/sendStickerSet':
