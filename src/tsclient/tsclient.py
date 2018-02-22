@@ -29,7 +29,7 @@ class Tsclient(object):
         self.listen = True
         self.quiet = False
 
-        # indicates if ts is running
+        # indicates if ts is runni
         self.tsRunning = False
 
         # set default ids
@@ -101,23 +101,23 @@ class Tsclient(object):
         # if Teamspeak is already running
         if self.tsRunning:
             self.writeTelegram("already in Teamspeak")
+        else:
+            # some output for Telegram
+            self.writeTelegram("joining Teamspeak")
 
-        # some output for Telegram
-        self.writeTelegram("joining Teamspeak")
+            # starts Teamspeak
+            subprocess.Popen(["ts3"], stdout=subprocess.PIPE)
+            time.sleep(30)
 
-        # starts Teamspeak
-        subprocess.Popen(["ts3"], stdout=subprocess.PIPE)
-        time.sleep(30)
+            # initiate Clientquery connection
+            client = Client(self.auth)
+            client.subscribe()
+            self.client = client
 
-        # initiate Clientquery connection
-        client = Client(self.auth)
-        client.subscribe()
-        self.client = client
-
-        # set boolean
-        self.setTsRunning(True)
-        self.setListen(True)
-        self.sendWhoami()
+            # set boolean
+            self.setTsRunning(True)
+            self.setListen(True)
+            self.sendWhoami()
 
     # stops Teamspeak
     def tsStop(self):
@@ -125,29 +125,22 @@ class Tsclient(object):
         if not self.tsRunning:
             self.writeTelegram("not in Teamspeak")
             return
-
-        # some output for Telegram
-        self.writeTelegram("quitting Teamspeak")
-
-        # close connection and quit Teamspeak
-        self.setTsRunning(False)
-        self.client.close()
-        call(["killall","-SIGKILL" , "ts3client_linux_amd64"])
-        call(["killall","-SIGKILL" , "ts3client_linux_x86"])
-        time.sleep(60);
-
-    # quits Teamspeak
-    def tsQuit(self):
-        if self.tsRunning:
-            self.tsStop()
         else:
-            self.writeTelegram('Not in Teamspeak')
+            # some output for Telegram
+            self.writeTelegram("quitting Teamspeak")
+
+            # close connection and quit Teamspeak
+            self.setTsRunning(False)
+            self.client.close()
+            call(["killall","-SIGKILL" , "ts3client_linux_amd64"])
+            call(["killall","-SIGKILL" , "ts3client_linux_x86"])
+            time.sleep(60);
 
     # quits if bot is alone on the server
     def autoQuit(self):
         self.logger.info("autoquit")
         if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.tsRunning:
-            self.tsQuit()
+            self.tsStop()
 
     # sends whoami command for verification
     def sendWhoami(self):

@@ -41,6 +41,9 @@ class Bot(object):
         MessageLoop(self.bot, self.handle).run_as_thread()
         self.keepAlive()
 
+        self.groupId = self.data.getChatId()
+        self.adminId = self.data.getAdminId()
+        self.otherId = self.data.getOtherId()
         self.initTeamspeak(self.data.getChatId())
 
         print 'I am listening ...'
@@ -61,31 +64,48 @@ class Bot(object):
             # debug output
             self.logger.info(msg)
 
-            if self.groupId == "0":
+            if self.groupId == '0' and msg['text'] == 'teamspeak':
                 self.initTeamspeak(chat_id)
+                self.bot.sendMessage(chat_id, "Teamspeak chat set")
 
-            # do nothing for now
-            elif chat_id != self.groupId:
+            elif self.adminId == '0' and msg['text'] == 'admin':
+                self.adminId = chat_id
+                self.data.setAdminId(chat_id)
+                self.bot.sendMessage(chat_id, "Admin chat set")
+
+            elif self.otherId == '0' and msg['text'] == 'other':
+                self.otherId = chat_id
+                self.data.setOtherId(chat_id)
+                self.bot.sendMessage(chat_id, "Other chat set")
+
+            elif chat_id == self.adminId:
+                self.writeTelegram()
+
+            # Handle other chats
+            elif chat_id == self.otherId:
                 message = ""
                 send = False
                 for x in msg['text'].split(' '):
                     if "i.imgur.com" in x:
-                        send = True
                         message += x.replace(".gifv", ".mp4") + " "
+                        send = True
                     elif "redd.it" in x or "reddit.com" in x:
-                        message += self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
-                        if message != "":
-                            send = True
+                        text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
+                        if text != "": send = True
+                        message += text
                     elif "gfycat.com" in x:
-                        message += self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
-                        if message != "":
-                            send = True
+                        text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
+                        if text != "": send = True
+                        message += text
                     else:
                         message += x + " "
 
                 if send:
                     self.bot.sendMessage(chat_id, message)
 
+            elif self.groupId != chat_id:
+                print "different chat yo"
+                
             # quitting teamspeak
             elif command == '/quit':
                 self.teamspeak.tsQuit()
