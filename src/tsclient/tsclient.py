@@ -200,6 +200,7 @@ class Tsclient(object):
     def getTsRunning(self):
         for pid in psutil.pids():
             p = psutil.Process(pid)
+            print p.name()
             if "ts3client" in p.name():
                 print pid
                 return pid
