@@ -1,8 +1,10 @@
 # -*- coding: iso-8859-1 -*-
 import subprocess
+import psutil
 import logging
 import threading
-from subprocess import call
+import os
+import signal
 import time
 from message import *
 from client import *
@@ -26,11 +28,7 @@ class Tsclient(object):
         self.tsClients = dict()
 
         # necessary for query handling
-        self.listen = True
         self.quiet = False
-
-        # indicates if ts is runni
-        self.tsRunning = False
 
         # set default ids
         self.invokerid = "0"
@@ -42,7 +40,7 @@ class Tsclient(object):
     # listen to Teamspeakchat
     def tsMessageLoop(self):
         while 1:
-            if self.tsRunning:
+            if self.getTsRunning():
 
                 # get teamspeak clientquery messages
                 messages = self.client.get_messages()
@@ -51,31 +49,35 @@ class Tsclient(object):
 
                     # outputs teamspeakchat in telegram group
                     if message.command == 'notifytextmessage':
-                        if self.listen and message['invokerid'] != self.invokerid:
+                        if message['invokerid'] != self.invokerid:
                             msg = message['invokername'] + ':\n' + message['msg']
                             msg = msg.replace("[URL]", "").replace("[/URL]", "")
                             self.writeTelegram(msg)
 
                     # Teamspeakuser changed to this channel
                     elif message.command == "notifyclientmoved":
-                        if 'ctid'in message.keys() and ['ctid'] == self.channelid:
-                            self.sendStatus(True)
+                        print message
+                        #if 'ctid'in message.keys() and message['ctid'] == self.channelid:
+                        #    self.sendStatus(True)
 
                     # Teamspeakuser changed to another channel
                     elif message.command == "notifyclientmoved":
-                        if 'clid'in message.keys():
-                            self.clientLeft(message['clid'])
+                        print message
+                        #if 'clid'in message.keys() and message['clid'] == self.channelid:
+                        #    self.clientLeft(message['clid'])
 
                     # Teamspeakuser joined 
                     elif message.command == "notifycliententerview":
-                        if 'ctid' in message.keys() and ['ctid'] == self.channelid:
-                            if 'client_nickname' in message.keys() and 'clid' in message.keys():
-                                self.clientJoined(message['clid'], message['client_nickname'])
+                        print message
+                        #if 'ctid' in message.keys() and message['ctid'] == self.channelid:
+                        #    if 'client_nickname' in message.keys() and 'clid' in message.keys():
+                        #        self.clientJoined(message['clid'], message['client_nickname'])
 
                     # Teamspeakuser left            
                     elif message.command == "notifyclientleftview":
-                        if 'cfid' in message.keys() and message['cfid'] == self.channelid and 'clid' in message.keys():
-                            self.clientLeft(message['clid'])
+                        print message
+                        #if 'cfid' in message.keys() and message['cfid'] == self.channelid and 'clid' in message.keys():
+                        #    self.clientLeft(message['clid'])
 
                     # gets current userid
                     elif message.is_response_to(Command('whoami')):
@@ -99,7 +101,7 @@ class Tsclient(object):
     def tsStart(self):
 
         # if Teamspeak is already running
-        if self.tsRunning:
+        if self.getTsRunning():
             self.writeTelegram("already in Teamspeak")
         else:
             # some output for Telegram
@@ -115,14 +117,12 @@ class Tsclient(object):
             self.client = client
 
             # set boolean
-            self.setTsRunning(True)
-            self.setListen(True)
             self.sendWhoami()
 
     # stops Teamspeak
     def tsStop(self):
 
-        if not self.tsRunning:
+        if not self.getTsRunning():
             self.writeTelegram("not in Teamspeak")
             return
         else:
@@ -130,16 +130,15 @@ class Tsclient(object):
             self.writeTelegram("quitting Teamspeak")
 
             # close connection and quit Teamspeak
-            self.setTsRunning(False)
             self.client.close()
-            call(["killall","-SIGKILL" , "ts3client_linux_amd64"])
-            call(["killall","-SIGKILL" , "ts3client_linux_x86"])
-            time.sleep(60);
+            while self.getTsRunning():
+                os.kill(self.getTsRunning(), signal.SIGKILL)
+            time.sleep(60)
 
     # quits if bot is alone on the server
     def autoQuit(self):
         self.logger.info("autoquit")
-        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.tsRunning:
+        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.getTsRunning():
             self.tsStop()
 
     # sends whoami command for verification
@@ -171,7 +170,6 @@ class Tsclient(object):
 
                 # add to message
                 msg += '\n' + part['client_nickname']
-        msg += '\nlisten: ' + str(self.listen)
 
         self.tsClients.clear()
         self.tsClients = clients
@@ -195,17 +193,13 @@ class Tsclient(object):
         self.tsClients[uid] = nickname
         self.writeTelegram(nickname + " joined Teamspeak")
 
-    # returns tsRunning variable
+    # returns if Teamspeak is runnig
     def getTsRunning(self):
-        return self.tsRunning
-
-    # sets tsRunning variable
-    def setTsRunning(self, tmp):
-        self.tsRunning = tmp
-
-    # sets listen variable
-    def setListen(self, tmp):
-        self.tsListen = tmp
+        for pid in psutil.pids():
+            p = psutil.Process(pid)
+            if "ts3client_" in p.name():
+                return pid
+            return 0
 
     # write message into Teamspeak chat
     def writeTeamspeak(self, string):

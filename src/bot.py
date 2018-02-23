@@ -82,7 +82,7 @@ class Bot(object):
                 if command.split(" ")[0] == '/getStickerSet':
                     if full_command.__len__() == 2:
                         stickers = self.bot.getStickerSet(full_command[1])
-                        print stickers
+                        print stickers['sicker']
 
                         self.bot.sendSticker(chat_id, stickers['stickers'][0])
                     else:
@@ -123,7 +123,7 @@ class Bot(object):
 
             # quitting teamspeak
             elif command == '/quit':
-                self.teamspeak.tsQuit()
+                self.teamspeak.tsStop()
 
             # joining teamspeak
             elif command == '/join':
@@ -134,16 +134,6 @@ class Bot(object):
                 # writes command for current channelclients
                 if command == '/status':
                     self.teamspeak.sendStatus()
-
-                # unlisten from teamspeakchat
-                elif command == '/stfu':
-                    self.teamspeak.setListen(False)
-                    self.writeTelegram('stopped listening to TS3 Chat')
-
-                # listen to teamspeakchat
-                elif command == '/listen':
-                    self.teamspeak.setListen(True)
-                    self.writeTelegram('started listening to TS3 Chat')
 
                 # set username for current id
                 elif command.split(" ")[0] == '/setusername':
