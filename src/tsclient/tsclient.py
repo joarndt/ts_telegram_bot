@@ -56,28 +56,31 @@ class Tsclient(object):
 
                     # Teamspeakuser changed to this channel
                     elif message.command == "notifyclientmoved":
-                        print message
-                        #if 'ctid'in message.keys() and message['ctid'] == self.channelid:
-                        #    self.sendStatus(True)
+                        if 'ctid'in message.keys() and message['ctid'] == self.channelid:
+                            if 'invokername' in message.keys() and 'clid' in message.keys():
+                                self.clientJoined(message['clid'], message['invokername'])
+                            else:
+                                self.sendStatus(True)
 
                     # Teamspeakuser changed to another channel
                     elif message.command == "notifyclientmoved":
-                        print message
-                        #if 'clid'in message.keys() and message['clid'] == self.channelid:
-                        #    self.clientLeft(message['clid'])
+                        if 'clid'in message.keys() and message['ctid'] != self.channelid:
+                            if 'invokername' in message.keys():
+                               if message['clid'] in self.tsClients:
+                                   self.clientLeft(message['clid'])
+                            else:
+                                self.sendStatus(True)
 
                     # Teamspeakuser joined 
                     elif message.command == "notifycliententerview":
-                        print message
-                        #if 'ctid' in message.keys() and message['ctid'] == self.channelid:
-                        #    if 'client_nickname' in message.keys() and 'clid' in message.keys():
-                        #        self.clientJoined(message['clid'], message['client_nickname'])
+                        if 'ctid' in message.keys() and message['ctid'] == self.channelid:
+                            if 'client_nickname' in message.keys() and 'clid' in message.keys():
+                                self.clientJoined(message['clid'], message['client_nickname'])
 
                     # Teamspeakuser left            
                     elif message.command == "notifyclientleftview":
-                        print message
-                        #if 'cfid' in message.keys() and message['cfid'] == self.channelid and 'clid' in message.keys():
-                        #    self.clientLeft(message['clid'])
+                        if 'cfid' in message.keys() and message['cfid'] == self.channelid and 'clid' in message.keys():
+                            self.clientLeft(message['clid'])
 
                     # gets current userid
                     elif message.is_response_to(Command('whoami')):
@@ -197,9 +200,10 @@ class Tsclient(object):
     def getTsRunning(self):
         for pid in psutil.pids():
             p = psutil.Process(pid)
-            if "ts3client_" in p.name():
+            if "ts3client" in p.name():
                 return pid
-            return 0
+            else:
+                return 0
 
     # write message into Teamspeak chat
     def writeTeamspeak(self, string):
