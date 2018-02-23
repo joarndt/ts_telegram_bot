@@ -201,8 +201,11 @@ class Tsclient(object):
         for pid in psutil.pids():
             p = psutil.Process(pid)
             if "ts3client" in p.name():
+                print pid
                 return pid
+
             else:
+                print "fuck"
                 return 0
 
     # write message into Teamspeak chat
