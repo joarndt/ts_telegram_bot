@@ -101,7 +101,7 @@ class Bot(object):
                 message = ""
                 send = False
                 for x in msg['text'].split(' '):
-                    if "i.imgur.com" in x:
+                    if "i.imgur.com" in x and ".gifv" in x:
                         message += x.replace(".gifv", ".mp4") + " "
                         send = True
                     elif "redd.it" in x or "reddit.com" in x:

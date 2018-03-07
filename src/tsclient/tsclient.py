@@ -24,6 +24,7 @@ class Tsclient(object):
         self.groupId = groupId
         self.logger = logging.getLogger('teamspeak3.handler')
         self.client = None
+        self.process = None
 
         # empty clientlist
         self.tsClients = dict()
@@ -199,6 +200,8 @@ class Tsclient(object):
 
     # returns if Teamspeak is runnig
     def getTsRunning(self):
+        if self.process is None:
+            return False
         return self.process.poll() is None
 
     # write message into Teamspeak chat
