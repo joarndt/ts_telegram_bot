@@ -1,6 +1,5 @@
 # -*- coding: iso-8859-1 -*-
 import subprocess
-import psutil
 import logging
 import threading
 import os
@@ -143,7 +142,7 @@ class Tsclient(object):
     # quits if bot is alone on the server
     def autoQuit(self):
         self.logger.info("autoquit")
-        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.getTsRunning():
+        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.client is not None:
             self.tsStop()
 
     # sends whoami command for verification
