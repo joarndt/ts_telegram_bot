@@ -23,6 +23,7 @@ class Tsclient(object):
         self.bot = bot
         self.groupId = groupId
         self.logger = logging.getLogger('teamspeak3.handler')
+        self.client = None
 
         # empty clientlist
         self.tsClients = dict()
@@ -40,7 +41,7 @@ class Tsclient(object):
     # listen to Teamspeakchat
     def tsMessageLoop(self):
         while 1:
-            if self.getTsRunning():
+            if self.client is not None:
 
                 # get teamspeak clientquery messages
                 messages = self.client.get_messages()
@@ -111,7 +112,7 @@ class Tsclient(object):
             self.writeTelegram("joining Teamspeak")
 
             # starts Teamspeak
-            subprocess.Popen(["ts3"], stdout=subprocess.PIPE)
+            self.process = subprocess.Popen(["ts3"], stdout=subprocess.PIPE, preexec_fn=os.setsid)
             time.sleep(30)
 
             # initiate Clientquery connection
@@ -127,15 +128,15 @@ class Tsclient(object):
 
         if not self.getTsRunning():
             self.writeTelegram("not in Teamspeak")
-            return
         else:
             # some output for Telegram
             self.writeTelegram("quitting Teamspeak")
 
             # close connection and quit Teamspeak
             self.client.close()
+            self.client = None
             while self.getTsRunning():
-                os.kill(self.getTsRunning(), signal.SIGKILL)
+                os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
             time.sleep(60)
 
     # quits if bot is alone on the server
@@ -198,16 +199,7 @@ class Tsclient(object):
 
     # returns if Teamspeak is runnig
     def getTsRunning(self):
-        for pid in psutil.pids():
-            p = psutil.Process(pid)
-            print p.name()
-            if "ts3client" in p.name():
-                print pid
-                return pid
-
-            else:
-                print "fuck"
-                return 0
+        return self.process.poll() is None
 
     # write message into Teamspeak chat
     def writeTeamspeak(self, string):
