@@ -41,7 +41,7 @@ class Tsclient(object):
     # listen to Teamspeakchat
     def tsMessageLoop(self):
         while 1:
-            if self.client is not None:
+            if self.getTsRunning():
 
                 # get teamspeak clientquery messages
                 messages = self.client.get_messages()
@@ -142,7 +142,7 @@ class Tsclient(object):
     # quits if bot is alone on the server
     def autoQuit(self):
         self.logger.info("autoquit")
-        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.client is not None:
+        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.getTsRunning():
             self.tsStop()
 
     # sends whoami command for verification
@@ -199,9 +199,7 @@ class Tsclient(object):
 
     # returns if Teamspeak is runnig
     def getTsRunning(self):
-        if self.process is None:
-            return False
-        return self.process.poll() is None
+        return self.client is not None
 
     # write message into Teamspeak chat
     def writeTeamspeak(self, string):
