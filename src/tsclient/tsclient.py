@@ -135,7 +135,7 @@ class Tsclient(object):
             # close connection and quit Teamspeak
             self.client.close()
             self.client = None
-            while self.getTsRunning():
+            while self.process.poll() is None:
                 os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
             time.sleep(60)
 
