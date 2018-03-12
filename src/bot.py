@@ -184,8 +184,7 @@ class Bot(object):
 
         if year is None:
             for years in quotes:
-                for part in years:
-                    string += part.toString() + "\n"
+                string += part.toString() + "\n"
         elif year in quotes:
             for part in quotes[year]:
                 string += part.toString() + "\n"
