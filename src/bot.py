@@ -59,7 +59,7 @@ class Bot(object):
         # checks for textmessage
         if 'text' in msg:
 
-            command = msg['text'].split('@')[0]
+            command = msg['text'].split[' '][0].split('@')[0]
             full_command = msg['text'].split(' ')
 
             # debug output
@@ -153,11 +153,11 @@ class Bot(object):
                     self.teamspeak.sendStatus()
 
                 # set username for current id
-                elif command.split(" ")[0] == '/setusername':
+                elif command == '/setusername':
                     self.setUsername(user_id, full_command)
 
                 # set usercolor for current id
-                elif command.split(" ")[0] == '/setusercolor':
+                elif command == '/setusercolor':
                     self.setUsercolor(user_id, full_command, msg)
 
                 # builds textmessages and writes it into teamspeakchat
