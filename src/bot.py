@@ -124,7 +124,7 @@ class Bot(object):
                         counter = 0
                         for year, quoteList in quotes.items():
                             for part in quoteList:
-                                string += "(" + str(counter) + ") " + part.toString() + "\n"
+                                string += "#" + str(counter) + " " + part.toString() + "\n"
                                 counter += 1
                         self.bot.sendMessage(chat_id, string)
                         self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
