@@ -90,6 +90,7 @@ class Data(object):
             data[year].append(quote)
         else:
             data[year] = [quote]
+        print data
         self.writeQuotes(data)
 
     def deleteQuote(self, year):
