@@ -126,8 +126,11 @@ class Bot(object):
                             for part in quoteList:
                                 string += "#" + str(counter) + " " + part.toString() + "\n"
                                 counter += 1
-                        self.bot.sendMessage(chat_id, string)
-                        self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
+                        if string == "":
+                            self.bot.sendMessage(chat_id, "Quotes don't exist")
+                        else:
+                            self.bot.sendMessage(chat_id, string)
+                            self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
 
                     elif full_command.__len__() == 2:
                         part = self.data.deleteQuote(full_command[1])
