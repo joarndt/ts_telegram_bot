@@ -218,7 +218,7 @@ class Bot(object):
 
         if string == "" and year is None:
             self.bot.sendMessage(self.otherId, "Quotes don't exist")
-        elif string == ""
+        elif string == "":
             self.bto.sendMessage(self.otherId, "Quotes don't exist in " + year)
         else:
             self.bot.sendMessage(self.otherId, string)
