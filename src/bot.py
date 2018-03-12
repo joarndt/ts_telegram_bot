@@ -108,7 +108,7 @@ class Bot(object):
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /quotes YEAR")
 
-                elif command == '/addQuote':
+                elif command == '/addquote':
                     if full_command.__len__() >= 3:
                         self.data.addQuote(quote.Quote(full_command[1],
                                                        msg['text'].replace(full_command[0] + ' ', '')
@@ -117,7 +117,7 @@ class Bot(object):
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addQuote NAME QUOTE")
 
-                elif command == '/deleteQuote':
+                elif command == '/deletequote':
                     quotes = self.data.readQuotes()
                     if full_command.__len__() == 1:
                         string = ""
