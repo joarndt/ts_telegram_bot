@@ -89,7 +89,7 @@ class Data(object):
         if year in data:
             data[year].append(quote)
         else:
-            data[year] = list().append(quote)
+            data[year] = [quote]
         self.writeQuotes(data)
 
     def deleteQuote(self, year):
