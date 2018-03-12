@@ -110,7 +110,9 @@ class Bot(object):
 
                 elif command == '/addQuote':
                     if full_command.__len__() >= 3:
-                        self.data.addQuote(quote.Quote(full_command[1], msg['text'][10:]))
+                        self.data.addQuote(quote.Quote(full_command[1],
+                                                       msg['text'].replace(full_command[0] + ' ', '')
+                                                       .replace(full_command[1] + ' ', '')))
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addQuote NAME QUOTE")
                 else:
@@ -182,12 +184,12 @@ class Bot(object):
     def printQuotes(self, quotes, year = None):
         string = ""
         if year is None:
-            for part in quotes:
-                print part
-                string += part.toString() + "\n"
+            for years, quoteList in quotes:
+                for part in quoteList:
+                    string += part.toString() + "\n"
+                    
         elif year in quotes:
             for part in quotes[year]:
-                print part
                 string += part.toString() + "\n"
         else:
             string = "No Quotes in: " + year
