@@ -109,8 +109,8 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "only use following syntax: /quotes YEAR")
 
                 elif command == '/addQuote':
-                    if full_command.__len__() == 3:
-                        self.data.addQuote(quote.Quote(full_command[1], full_command[2]))
+                    if full_command.__len__() >= 3:
+                        self.data.addQuote(quote.Quote(full_command[1], msg['text'][10:]))
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addQuote NAME QUOTE")
                 else:

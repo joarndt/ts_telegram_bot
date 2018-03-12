@@ -86,7 +86,10 @@ class Data(object):
 
     def addQuote(self, quote, year = str(datetime.today().year)):
         data = self.readQuotes()
-        data[year].append(quote)
+        if year in data:
+            data[year].append(quote)
+        else:
+            data[year] = list().append(quote)
         self.writeQuotes(data)
 
     def deleteQuote(self, year):
