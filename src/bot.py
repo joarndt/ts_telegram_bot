@@ -59,7 +59,7 @@ class Bot(object):
         # checks for textmessage
         if 'text' in msg:
 
-            command = msg['text'].split[' '][0].split('@')[0]
+            command = msg['text'].split(' ')[0].split('@')[0]
             full_command = msg['text'].split(' ')
 
             # debug output
