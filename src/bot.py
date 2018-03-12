@@ -124,19 +124,14 @@ class Bot(object):
                         counter = 0
                         for year, quoteList in quotes.items():
                             for part in quoteList:
-                                string += str(counter) + part.toString() + "\n"
+                                string += "(" + str(counter) + ") " + part.toString() + "\n"
                                 counter += 1
                         self.bot.sendMessage(chat_id, string)
                         self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
 
                     elif full_command.__len__() == 2:
-                        counter = 0
-                        for year, quoteList in quotes.items():
-                            for part in quoteList:
-                                if str(counter) == full_command[1]:
-                                    quotes[year].remove(part)
-                                    self.bot.sendMessage(chat_id, part.toString() + "\nwas removed")
-                                counter += 1
+                        self.data.deleteQuote(full_command[1])
+                        self.bot.sendMessage(chat_id, part.toString() + "\nwas removed")
                     else:
                         self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
                         self.bot.sendMessage(chat_id, "or /deleteQuote for a list of Message IDS ")

@@ -93,7 +93,14 @@ class Data(object):
         self.writeQuotes(data)
 
     def deleteQuote(self, year):
-        print "not implemented yet"
+        quotes = self.readQuotes()
+        counter = 0
+        for year, quoteList in quotes.items():
+            for part in quoteList:
+                if str(counter) == year:
+                    quotes[year].remove(part)
+                counter += 1
+        self.writeQuotes(quotes)
 
     # check if its a known user
     def isUser(self, uid):
