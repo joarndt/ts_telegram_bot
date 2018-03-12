@@ -181,11 +181,10 @@ class Bot(object):
 
     def printQuotes(self, quotes, year = None):
         string = ""
-
+        print quotes
         if year is None:
-            for years in quotes:
-                for part in years:
-                    string += part.toString() + "\n"
+            for part in quotes:
+                string += part.toString() + "\n"
         elif year in quotes:
             for part in quotes[year]:
                 string += part.toString() + "\n"
