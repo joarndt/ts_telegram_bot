@@ -130,8 +130,11 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
 
                     elif full_command.__len__() == 2:
-                        self.data.deleteQuote(full_command[1])
-                        self.bot.sendMessage(chat_id, part.toString() + "\nwas removed")
+                        part = self.data.deleteQuote(full_command[1])
+                        if part is None:
+                            self.bot.sendMessage(chat_id, "Quote not found")
+                        else:
+                            self.bot.sendMessage(chat_id, part.toString() + "\nwas removed")
                     else:
                         self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
                         self.bot.sendMessage(chat_id, "or /deleteQuote for a list of Message IDS ")

@@ -99,8 +99,10 @@ class Data(object):
             for part in quoteList:
                 if str(counter) == year:
                     quotes[year].remove(part)
+                    self.writeQuotes(quotes)
+                    return part
                 counter += 1
-        self.writeQuotes(quotes)
+        return None
 
     # check if its a known user
     def isUser(self, uid):
