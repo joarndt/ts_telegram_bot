@@ -214,10 +214,14 @@ class Bot(object):
         elif year in quotes:
             for part in quotes[year]:
                 string += part.toString() + "\n"
-        else:
-            string = "No Quotes in: " + year
+                self.bot.sendMessage(self.otherId, "Quotes don't exist in" + year)
 
-        self.bot.sendMessage(self.otherId, string)
+        if string == "" and year is None:
+            self.bot.sendMessage(self.otherId, "Quotes don't exist")
+        elif string == ""
+            self.bto.sendMessage(self.otherId, "Quotes don't exist in " + year)
+        else:
+            self.bot.sendMessage(self.otherId, string)
 
     # init Teamspeak
     def initTeamspeak(self, chatId):
