@@ -102,7 +102,7 @@ class Bot(object):
 
                 if command == '/quotes':
                     if full_command.__len__() == 2:
-                        self.printQuotes(self.data.readQuotes(), full_command(1))
+                        self.printQuotes(self.data.readQuotes(), full_command[1])
                     elif full_command.__len__() == 1:
                         self.printQuotes(self.data.readQuotes())
                     else:
@@ -181,12 +181,13 @@ class Bot(object):
 
     def printQuotes(self, quotes, year = None):
         string = ""
-        print quotes
         if year is None:
             for part in quotes:
+                print part
                 string += part.toString() + "\n"
         elif year in quotes:
             for part in quotes[year]:
+                print part
                 string += part.toString() + "\n"
         else:
             string = "No Quotes in: " + year
