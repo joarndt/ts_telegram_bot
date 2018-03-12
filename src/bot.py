@@ -1,5 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 from datetime import datetime
+import src.quote as quote
 import threading
 import time
 import urllib2
@@ -79,15 +80,15 @@ class Bot(object):
                 self.bot.sendMessage(chat_id, "Other chat set")
 
             elif chat_id == self.adminId:
-                if command.split(" ")[0] == '/getStickerSet':
+                if command == '/getStickerSet':
                     if full_command.__len__() == 2:
                         stickers = self.bot.getStickerSet(full_command[1])
-                        print stickers['sicker']
+                        print stickers['sticker']
 
                         self.bot.sendSticker(chat_id, stickers['stickers'][0])
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /setStickerSet NAMEOFSET")
-                elif command.split(" ")[0] == '/sendStickerSet':
+                elif command == '/sendStickerSet':
                     if full_command.__len__() == 2:
                         #self.bot.sendSticker(chat_id, )
                         print "nothing for now"
@@ -98,25 +99,41 @@ class Bot(object):
 
             # Handle other chats
             elif chat_id == self.otherId:
-                message = ""
-                send = False
-                for x in msg['text'].split(' '):
-                    if "i.imgur.com" in x and ".gifv" in x:
-                        message += x.replace(".gifv", ".mp4") + " "
-                        send = True
-                    elif "redd.it" in x or "reddit.com" in x:
-                        text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
-                        if text != "": send = True
-                        message += text
-                    elif "gfycat.com" in x:
-                        text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
-                        if text != "": send = True
-                        message += text
-                    else:
-                        message += x + " "
 
-                if send:
-                    self.bot.sendMessage(chat_id, message)
+                if command == '/quotes':
+                    if full_command.__len__() == 2:
+                        self.printQuotes(self.data.readQuotes(), full_command(1))
+                    elif full_command.__len__() == 1:
+                        self.printQuotes(self.data.readQuotes())
+                    else:
+                        self.bot.sendMessage(chat_id, "only use following syntax: /quotes YEAR")
+
+                elif command == '/addQuote':
+                    if full_command.__len__() == 3:
+                        self.data.addQuote(quote.Quote(full_command[1], full_command[2]))
+                    else:
+                        self.bot.sendMessage(chat_id, "only use following syntax: /addQuote NAME QUOTE")
+                else:
+
+                    message = ""
+                    send = False
+                    for x in msg['text'].split(' '):
+                        if "i.imgur.com" in x and ".gifv" in x:
+                            message += x.replace(".gifv", ".mp4") + " "
+                            send = True
+                        elif "redd.it" in x or "reddit.com" in x:
+                            text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
+                            if text != "": send = True
+                            message += text
+                        elif "gfycat.com" in x:
+                            text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
+                            if text != "": send = True
+                            message += text
+                        else:
+                            message += x + " "
+
+                    if send:
+                        self.bot.sendMessage(chat_id, message)
 
             elif self.groupId != chat_id:
                 print "different chat yo"
@@ -161,6 +178,21 @@ class Bot(object):
 
 #           else:
 #               writeTelegram('bot is not in Teamspeak')
+
+    def printQuotes(self, quotes, year = None):
+        string = ""
+
+        if year is None:
+            for years in quotes:
+                for part in years:
+                    string += part.toString() + "\n"
+        elif year in quotes:
+            for part in quotes[year]:
+                string += part.toString() + "\n"
+        else:
+            string = "No Quotes in: " + year
+
+        self.bot.sendMessage(self.otherId, string)
 
     # init Teamspeak
     def initTeamspeak(self, chatId):

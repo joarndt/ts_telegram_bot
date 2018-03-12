@@ -1,4 +1,6 @@
 import pickle
+import src.quote
+from datetime import datetime
 
 # class that contains necessary data for the Teamspeakbot
 # it reads and saves necessary data in files
@@ -66,6 +68,29 @@ class Data(object):
     def writeBotData(self):
         with open(self.dataPath + 'data.pkl', 'wb') as fp:
             return pickle.dump(self.botData, fp)
+
+    # returns the Quotes
+    def readQuotes(self):
+
+        # create or read user Info
+        try:
+            with open(self.dataPath + 'quotes.pkl', 'rb') as fp:
+                return pickle.load(fp)
+        except (OSError, IOError, EOFError) as e:
+            self.writeQuotes(dict())
+            return self.readQuotes()
+
+    def writeQuotes(self, quotes):
+        with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
+            return pickle.dump(quotes, fp)
+
+    def addQuote(self, quote, year = str(datetime.today().year())):
+        data = self.readQuotes()
+        data[year].append(quote)
+        self.writeQuotes(data)
+
+    def deleteQuote(self, year):
+        print "not implemented yet"
 
     # check if its a known user
     def isUser(self, uid):
