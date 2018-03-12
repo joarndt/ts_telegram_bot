@@ -92,12 +92,12 @@ class Data(object):
             data[year] = [quote]
         self.writeQuotes(data)
 
-    def deleteQuote(self, year):
+    def deleteQuote(self, number):
         quotes = self.readQuotes()
         counter = 0
-        for years, quoteList in quotes.items():
+        for year, quoteList in quotes.items():
             for part in quoteList:
-                if str(counter) == year:
+                if str(counter) == number:
                     quotes[year].remove(part)
                     self.writeQuotes(quotes)
                     return part
