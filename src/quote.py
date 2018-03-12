@@ -10,7 +10,7 @@ class Quote(object):
         self.date = date
 
     def toString(self):
-        return str(self.date.year()) + " - " + self.name + ": " + self.quote
+        return str(self.date.year) + " - " + self.name + ": " + self.quote
 
     def setName(self, name):
         self.name = name

@@ -84,7 +84,7 @@ class Data(object):
         with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
             return pickle.dump(quotes, fp)
 
-    def addQuote(self, quote, year = str(datetime.today().year())):
+    def addQuote(self, quote, year = str(datetime.today().year)):
         data = self.readQuotes()
         data[year].append(quote)
         self.writeQuotes(data)
