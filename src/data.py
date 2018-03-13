@@ -108,13 +108,6 @@ class Data(object):
     def isUser(self, uid):
         return uid in self.userInfo
 
-    def isNumber(self, number):
-        try:
-            int(number)
-            return True
-        except ValueError:
-            return False
-
     # getter and setter
 
     # returns userinfo

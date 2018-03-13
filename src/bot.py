@@ -95,8 +95,6 @@ class Bot(object):
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /sendSticker Sticker")
 
-
-
             # Handle other chats
             elif chat_id == self.otherId:
 
