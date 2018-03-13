@@ -120,9 +120,7 @@ class Bot(object):
                                 int(full_command[1])
                             )
                         )
-
                         self.bot.sendMessage(chat_id, "Quote added")
-
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
                         self.data.addQuote(
                             quote.Quote(
@@ -135,7 +133,7 @@ class Bot(object):
                         )
                         self.bot.sendMessage(chat_id, "Quote added")
                     else:
-                        self.bot.sendMessage(chat_id, "only use following syntax: /addQuote YEAR(optional) NAME QUOTE")
+                        self.bot.sendMessage(chat_id, "only use following syntax: /addquote YEAR(optional) NAME QUOTE")
 
                 elif command == '/deletequote':
                     quotes = self.data.readQuotes()
@@ -150,7 +148,7 @@ class Bot(object):
                             self.bot.sendMessage(chat_id, "Quotes don't exist")
                         else:
                             self.bot.sendMessage(chat_id, string)
-                            self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
+                            self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
 
                     elif full_command.__len__() == 2:
                         part = self.data.deleteQuote(full_command[1])
@@ -159,8 +157,8 @@ class Bot(object):
                         else:
                             self.bot.sendMessage(chat_id, part.toString() + "\nwas removed")
                     else:
-                        self.bot.sendMessage(chat_id, "Use following syntax /deleteQuote QUOTE_ID")
-                        self.bot.sendMessage(chat_id, "or /deleteQuote for a list of Message IDS ")
+                        self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
+                        self.bot.sendMessage(chat_id, "or /deletequote for a list of Message IDS ")
 
                 else:
                     message = ""
