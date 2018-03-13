@@ -110,8 +110,13 @@ class Bot(object):
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
                         self.data.addQuote(
                             quote.Quote(
-                                full_command[1],
-                                msg['text'].replace(full_command[0] + ' ', '').replace(full_command[1] + ' ', ''),
+                                full_command[2],
+                                msg['text'].replace(full_command[0] +
+                                                    ' ' +
+                                                    full_command[1] +
+                                                    ' ' +
+                                                    full_command[2] +
+                                                    ' ', ''),
                                 int(full_command[1])
                             )
                         )
@@ -122,8 +127,10 @@ class Bot(object):
                         self.data.addQuote(
                             quote.Quote(
                                 full_command[1],
-                                msg['text'].replace(full_command[0] + ' ', '')
-                                .replace(full_command[1] + ' ', '')
+                                msg['text'].replace(full_command[0] +
+                                                    ' ' +
+                                                    full_command[1] +
+                                                    ' ', '')
                             )
                         )
                         self.bot.sendMessage(chat_id, "Quote added")
