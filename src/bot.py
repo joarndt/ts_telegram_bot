@@ -128,7 +128,7 @@ class Bot(object):
                         )
                         self.bot.sendMessage(chat_id, "Quote added")
                     else:
-                        self.bot.sendMessage(chat_id, "only use following syntax: /addQuote NAME QUOTE")
+                        self.bot.sendMessage(chat_id, "only use following syntax: /addQuote YEAR(optional) NAME QUOTE")
 
                 elif command == '/deletequote':
                     quotes = self.data.readQuotes()
