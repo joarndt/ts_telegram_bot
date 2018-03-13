@@ -4,10 +4,10 @@ from datetime import datetime
 class Quote(object):
 
     # init Ts client
-    def __init__(self, name, quote, date = datetime.today()):
+    def __init__(self, name, quote, year=datetime.today().year):
         self.name = name
         self.quote = quote
-        self.date = date
+        self.date = datetime(year, datetime.today().month, datetime.today().day)
 
     def toString(self):
         return str(self.date.year) + " - " + self.name + ": " + self.quote

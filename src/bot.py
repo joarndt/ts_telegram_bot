@@ -109,10 +109,25 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "only use following syntax: /quotes YEAR")
 
                 elif command == '/addquote':
-                    if full_command.__len__() >= 3:
-                        self.data.addQuote(quote.Quote(full_command[1],
-                                                       msg['text'].replace(full_command[0] + ' ', '')
-                                                       .replace(full_command[1] + ' ', '')))
+                    if full_command.__len__() > 3 and self.isNumber(full_command[1]):
+                        self.data.addQuote(
+                            quote.Quote(
+                                full_command[1],
+                                msg['text'].replace(full_command[0] + ' ', '').replace(full_command[1] + ' ', ''),
+                                int(full_command[1])
+                            )
+                        )
+
+                        self.bot.sendMessage(chat_id, "Quote added")
+
+                    elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
+                        self.data.addQuote(
+                            quote.Quote(
+                                full_command[1],
+                                msg['text'].replace(full_command[0] + ' ', '')
+                                .replace(full_command[1] + ' ', '')
+                            )
+                        )
                         self.bot.sendMessage(chat_id, "Quote added")
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addQuote NAME QUOTE")
@@ -225,6 +240,13 @@ class Bot(object):
             self.bot.sendMessage(self.otherId, "Quotes don't exist in " + year)
         else:
             self.bot.sendMessage(self.otherId, string)
+
+    def isNumber(self, number):
+        try:
+            int(number)
+            return True
+        except ValueError:
+            return False
 
     # init Teamspeak
     def initTeamspeak(self, chatId):

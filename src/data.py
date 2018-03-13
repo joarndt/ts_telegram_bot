@@ -84,12 +84,12 @@ class Data(object):
         with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
             return pickle.dump(quotes, fp)
 
-    def addQuote(self, quote, year = str(datetime.today().year)):
+    def addQuote(self, quote, year = datetime.today().year):
         data = self.readQuotes()
-        if year in data:
-            data[year].append(quote)
+        if str(year) in data:
+            data[str(year)].append(quote, int(year))
         else:
-            data[year] = [quote]
+            data[str(year)] = [quote, int(year)]
         self.writeQuotes(data)
 
     def deleteQuote(self, number):
@@ -107,6 +107,13 @@ class Data(object):
     # check if its a known user
     def isUser(self, uid):
         return uid in self.userInfo
+
+    def isNumber(self, number):
+        try:
+            int(number)
+            return True
+        except ValueError:
+            return False
 
     # getter and setter
 
