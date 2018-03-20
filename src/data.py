@@ -1,6 +1,4 @@
 import pickle
-import src.quote
-from collections import OrderedDict
 from datetime import datetime
 
 # class that contains necessary data for the Teamspeakbot
@@ -76,14 +74,14 @@ class Data(object):
         # create or read user Info
         try:
             with open(self.dataPath + 'quotes.pkl', 'rb') as fp:
-                return OrderedDict(sorted(pickle.load(fp).items(), key=lambda t: t[0]))
+                return pickle.load(fp)
         except (OSError, IOError, EOFError):
-            self.writeQuotes(OrderedDict())
+            self.writeQuotes(dict())
             return self.readQuotes()
 
     def writeQuotes(self, quotes):
         with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
-            return pickle.dump(OrderedDict(sorted(quotes.items(), key=lambda t: t[0])), fp)
+            return pickle.dump(quotes, fp)
 
     def addQuote(self, quote, year=datetime.today().year):
         data = self.readQuotes()

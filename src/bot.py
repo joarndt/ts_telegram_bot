@@ -9,6 +9,7 @@ import telepot
 from telepot.loop import MessageLoop
 import src.tsclient.tsclient as ts
 import logging
+from collections import OrderedDict
 
 # Telegram bot class
 
@@ -228,7 +229,7 @@ class Bot(object):
     def printQuotes(self, quotes, year=None):
         string = ""
         if year is None:
-            for years, quoteList in quotes.items():
+            for years, quoteList in OrderedDict(sorted(quotes.items(), key=lambda t: t[0])):
                 for part in quoteList:
                     string += part.toString() + "\n"
 
