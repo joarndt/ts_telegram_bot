@@ -225,15 +225,15 @@ class Bot(object):
 #           else:
 #               writeTelegram('bot is not in Teamspeak')
 
-    def printQuotes(self, quotes, year = None):
+    def printQuotes(self, quotes, year=None):
         string = ""
         if year is None:
             for years, quoteList in quotes.items():
                 for part in quoteList:
                     string += part.toString() + "\n"
 
-        elif str(year) in quotes:
-            for part in quotes[str(year)]:
+        elif year in quotes:
+            for part in quotes[year]:
                 string += part.toString() + "\n"
                 self.bot.sendMessage(self.otherId, "Quotes don't exist in" + year)
 
