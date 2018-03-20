@@ -99,8 +99,8 @@ class Bot(object):
             elif chat_id == self.otherId:
 
                 if command == '/quotes':
-                    if full_command.__len__() == 2:
-                        self.printQuotes(self.data.readQuotes(), full_command[1])
+                    if full_command.__len__() == 2 and self.isNumber(full_command[1]):
+                        self.printQuotes(self.data.readQuotes(), int(full_command[1]))
                     elif full_command.__len__() == 1:
                         self.printQuotes(self.data.readQuotes())
                     else:

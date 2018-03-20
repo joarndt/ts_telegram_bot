@@ -76,14 +76,14 @@ class Data(object):
         # create or read user Info
         try:
             with open(self.dataPath + 'quotes.pkl', 'rb') as fp:
-                return OrderedDict(sorted(pickle.load(fp).items()))
+                return pickle.load(fp).items()
         except (OSError, IOError, EOFError):
             self.writeQuotes(OrderedDict())
             return self.readQuotes()
 
     def writeQuotes(self, quotes):
         with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
-            return pickle.dump(OrderedDict(sorted(quotes.items())), fp)
+            return pickle.dump(OrderedDict(sorted(quotes.items(), key=lambda t: t[0])), fp)
 
     def addQuote(self, quote, year=datetime.today().year):
         data = self.readQuotes()
