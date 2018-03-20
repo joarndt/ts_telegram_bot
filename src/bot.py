@@ -244,7 +244,7 @@ class Bot(object):
         elif string == "":
             self.bot.sendMessage(self.otherId, "Quotes don't exist in " + str(year))
         else:
-            self.bot.sendMessage(self.otherId, string)
+            self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
 
     def isNumber(self, number):
         try:
@@ -270,11 +270,11 @@ class Bot(object):
         while True:
             try:
                 self.bot.getMe()
-                if not(self.groupId == "0") and datetime.today().hour < 18:
+                if not(self.groupId == "0") and datetime.today().hour % 23 < 17:
                     self.teamspeak.autoQuit()
                 time.sleep(60)
 
-                if datetime.today().hour >= 18 and not self.teamspeak.getTsRunning():
+                if datetime.today().hour == 17 and datetime.today().minute == 0 and not self.teamspeak.getTsRunning():
                     self.teamspeak.tsStart()
 
             except Exception:
