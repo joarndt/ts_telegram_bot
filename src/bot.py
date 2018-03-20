@@ -229,14 +229,13 @@ class Bot(object):
     def printQuotes(self, quotes, year=None):
         string = ""
         if year is None:
-            for years, quoteList in OrderedDict(sorted(quotes.items(), key=lambda t: t[0])):
-                for part in quoteList:
+            for years in quotes:
+                for part in quotes[years]:
                     string += part.toString() + "\n"
 
         elif year in quotes:
             for part in quotes[year]:
                 string += part.toString() + "\n"
-                self.bot.sendMessage(self.otherId, "Quotes don't exist in" + year)
 
         if string == "" and year is None:
             self.bot.sendMessage(self.otherId, "Quotes don't exist")
