@@ -109,8 +109,8 @@ class Bot(object):
 
                 elif command == '/addquote':
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
-                        self.data.addQuote(
-                            quote.Quote(
+
+                        newquote = quote.Quote(
                                 full_command[2],
                                 msg['text'].replace(full_command[0] +
                                                     ' ' +
@@ -120,19 +120,20 @@ class Bot(object):
                                                     ' ', ''),
                                 int(full_command[1])
                             )
-                        )
-                        self.bot.sendMessage(chat_id, "Quote added")
+                        self.data.addQuote(newquote)
+                        self.bot.sendMessage(chat_id, newquote.toString() + "'added")
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
-                        self.data.addQuote(
-                            quote.Quote(
+                        newquote = quote.Quote(
                                 full_command[1],
                                 msg['text'].replace(full_command[0] +
                                                     ' ' +
                                                     full_command[1] +
                                                     ' ', '')
                             )
+                        self.data.addQuote(
+                            newquote
                         )
-                        self.bot.sendMessage(chat_id, "Quote added")
+                        self.bot.sendMessage(chat_id, newquote.toString() + "'added")
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addquote YEAR(optional) NAME QUOTE")
 
@@ -228,6 +229,7 @@ class Bot(object):
 
     def printQuotes(self, quotes, year=None):
         sortedQuotes = OrderedDict(sorted(quotes.items()))
+        print sortedQuotes
         string = ""
         if year is None:
             for years in sortedQuotes:
