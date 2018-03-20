@@ -10,7 +10,7 @@ class Quote(object):
         self.date = datetime(year, datetime.today().month, datetime.today().day)
 
     def toString(self):
-        return str(self.date.year) + " - *" + self.name + "*: _" + self.quote + "_"
+        return str(self.date.year) + " - *" + self.name + "*: " + self.quote
 
     def setName(self, name):
         self.name = name
