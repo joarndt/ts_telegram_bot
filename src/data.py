@@ -77,12 +77,12 @@ class Data(object):
             with open(self.dataPath + 'quotes.pkl', 'rb') as fp:
                 return pickle.load(fp)
         except (OSError, IOError, EOFError):
-            self.writeQuotes(dict())
+            self.writeQuotes(OrderedDict())
             return self.readQuotes()
 
     def writeQuotes(self, quotes):
         with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
-            return pickle.dump(quotes, fp)
+            return pickle.dump(OrderedDict(sorted(quotes.items())), fp)
 
     def addQuote(self, quote):
         year = quote.getDate().year

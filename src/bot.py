@@ -228,22 +228,21 @@ class Bot(object):
 #               writeTelegram('bot is not in Teamspeak')
 
     def printQuotes(self, quotes, year=None):
-        sortedQuotes = OrderedDict(sorted(quotes.items()))
-        print sortedQuotes
+
         string = ""
         if year is None:
-            for years in sortedQuotes:
-                for part in sortedQuotes[years]:
+            for years in quotes:
+                for part in quotes[years]:
                     string += part.toString() + "\n"
 
-        elif year in sortedQuotes:
-            for part in sortedQuotes[year]:
+        elif year in quotes:
+            for part in quotes[year]:
                 string += part.toString() + "\n"
 
         if string == "" and year is None:
             self.bot.sendMessage(self.otherId, "Quotes don't exist")
         elif string == "":
-            self.bot.sendMessage(self.otherId, "Quotes don't exist in " + year)
+            self.bot.sendMessage(self.otherId, "Quotes don't exist in " + str(year))
         else:
             self.bot.sendMessage(self.otherId, string)
 
