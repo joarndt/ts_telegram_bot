@@ -4,7 +4,7 @@ from datetime import datetime
 class Quote(object):
 
     # init Ts client
-    def __init__(self, name, quote, year=datetime.today().year):
+    def __init__(self, name, quote, year=int(datetime.today().year)):
         self.name = name
         self.quote = quote
         self.date = datetime(year, datetime.today().month, datetime.today().day)
