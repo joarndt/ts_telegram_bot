@@ -82,7 +82,7 @@ class Data(object):
 
     def writeQuotes(self, quotes):
         with open(self.dataPath + 'quotes.pkl', 'wb') as fp:
-            return pickle.dump(OrderedDict(sorted(quotes.items()), fp))
+            return pickle.dump(OrderedDict(sorted(quotes.items())), fp)
 
     def addQuote(self, quote, year=int(datetime.today().year)):
         data = self.readQuotes()
