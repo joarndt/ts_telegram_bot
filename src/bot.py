@@ -121,7 +121,7 @@ class Bot(object):
                                 int(full_command[1])
                             )
                         self.data.addQuote(newquote)
-                        self.bot.sendMessage(chat_id, newquote.toString() + "'added")
+                        self.bot.sendMessage(chat_id, '"' + newquote.toString() + '"' + " added")
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
                         newquote = quote.Quote(
                                 full_command[1],
@@ -133,7 +133,7 @@ class Bot(object):
                         self.data.addQuote(
                             newquote
                         )
-                        self.bot.sendMessage(chat_id, newquote.toString() + "'added")
+                        self.bot.sendMessage(chat_id, '"' + newquote.toString() + '"' + " added")
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addquote YEAR(optional) NAME QUOTE")
 
