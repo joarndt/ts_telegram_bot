@@ -75,7 +75,7 @@ class Data(object):
         # create or read user Info
         try:
             with open(self.dataPath + 'quotes.pkl', 'rb') as fp:
-                return pickle.load(fp)
+                return sorted(pickle.load(fp))
         except (OSError, IOError, EOFError) as e:
             self.writeQuotes(dict())
             return self.readQuotes()

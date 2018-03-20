@@ -232,8 +232,8 @@ class Bot(object):
                 for part in quoteList:
                     string += part.toString() + "\n"
 
-        elif year in quotes:
-            for part in quotes[year]:
+        elif str(year) in quotes:
+            for part in quotes[str(year)]:
                 string += part.toString() + "\n"
                 self.bot.sendMessage(self.otherId, "Quotes don't exist in" + year)
 
