@@ -76,7 +76,7 @@ class Data(object):
         # create or read user Info
         try:
             with open(self.dataPath + 'quotes.pkl', 'rb') as fp:
-                return OrderedDict(pickle.load(fp).items())
+                return OrderedDict(pickle.load(fp).items(), key=lambda t: t[0])
         except (OSError, IOError, EOFError):
             self.writeQuotes(OrderedDict())
             return self.readQuotes()
