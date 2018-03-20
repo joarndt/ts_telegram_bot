@@ -227,14 +227,15 @@ class Bot(object):
 #               writeTelegram('bot is not in Teamspeak')
 
     def printQuotes(self, quotes, year=None):
+        sortedQuotes = OrderedDict(sorted(quotes.items()))
         string = ""
         if year is None:
-            for years in quotes:
-                for part in quotes[years]:
+            for years in sortedQuotes:
+                for part in sortedQuotes[years]:
                     string += part.toString() + "\n"
 
-        elif year in quotes:
-            for part in quotes[year]:
+        elif year in sortedQuotes:
+            for part in sortedQuotes[year]:
                 string += part.toString() + "\n"
 
         if string == "" and year is None:
