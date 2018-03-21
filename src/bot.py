@@ -9,7 +9,7 @@ import telepot
 from telepot.loop import MessageLoop
 import src.tsclient.tsclient as ts
 import logging
-from collections import OrderedDict
+import subprocess
 
 # Telegram bot class
 
@@ -81,20 +81,8 @@ class Bot(object):
                 self.bot.sendMessage(chat_id, "Other chat set")
 
             elif chat_id == self.adminId:
-                if command == '/getStickerSet':
-                    if full_command.__len__() == 2:
-                        stickers = self.bot.getStickerSet(full_command[1])
-                        print stickers['sticker']
-
-                        self.bot.sendSticker(chat_id, stickers['stickers'][0])
-                    else:
-                        self.bot.sendMessage(chat_id, "only use following syntax: /setStickerSet NAMEOFSET")
-                elif command == '/sendStickerSet':
-                    if full_command.__len__() == 2:
-                        #self.bot.sendSticker(chat_id, )
-                        print "nothing for now"
-                    else:
-                        self.bot.sendMessage(chat_id, "only use following syntax: /sendSticker Sticker")
+                if command == '/kill':
+                    subprocess.Popen(['killall', 'python'], stdout=subprocess.PIPE)
 
             # Handle other chats
             elif chat_id == self.otherId:
