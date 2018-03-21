@@ -48,6 +48,8 @@ class Bot(object):
         self.otherId = self.data.getOtherId()
         self.initTeamspeak(self.data.getChatId())
 
+        if self.adminId != '0':
+            self.bot.sendMessage(self.adminId, "Starting...")
         print 'I am listening ...'
 
     # Telegram bot loop
