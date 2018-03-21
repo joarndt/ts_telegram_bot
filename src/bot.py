@@ -260,6 +260,7 @@ class Bot(object):
         while True:
             try:
                 self.bot.getMe()
+                print datetime.today().hour % 23
                 if not(self.groupId == "0") and int(datetime.today().hour) % 23 < 7:
                     self.teamspeak.autoQuit()
                 time.sleep(60)
