@@ -132,8 +132,8 @@ class Bot(object):
                     if full_command.__len__() == 1:
                         string = ""
                         counter = 0
-                        for year, quoteList in quotes.items():
-                            for part in quoteList:
+                        for years in quotes:
+                            for part in quotes[years]:
                                 string += "#" + str(counter) + " " + str(part) + "\n"
                                 counter += 1
                         if string == "":

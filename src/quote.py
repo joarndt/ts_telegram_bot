@@ -9,14 +9,8 @@ class Quote(object):
         self.quote = quote
         self.date = datetime(year, datetime.today().month, datetime.today().day)
 
-    def toString(self):
-        str(self.date.year) + " - *" + self.name + "*: " + self.quote
-
     def __str__(self):
         return str(self.date.year) + " - *" + self.name + "*: " + self.quote
-
-    def __add__(self, other=""):
-        return self.toString + other
 
     def setName(self, name):
         self.name = name
