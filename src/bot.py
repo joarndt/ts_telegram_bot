@@ -270,12 +270,15 @@ class Bot(object):
         while True:
             try:
                 self.bot.getMe()
-                if not(self.groupId == "0") and datetime.today().hour % 23 < 17:
+                if not(self.groupId == "0") and int(datetime.today().hour) % 23 < 17:
                     self.teamspeak.autoQuit()
                 time.sleep(60)
 
                 if datetime.today().hour == 17 and datetime.today().minute == 0 and not self.teamspeak.getTsRunning():
                     self.teamspeak.tsStart()
+
+                if datetime.today().hour == 12 and datetime.today().minute == 37:
+                    self.bot.sendMessage(self.otherId, "1337")
 
             except Exception:
                 self.logger.debug("Thread wanted to die")
