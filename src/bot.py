@@ -260,9 +260,8 @@ class Bot(object):
         while True:
             try:
                 self.bot.getMe()
-                if not(self.groupId == "0") and int(datetime.today().hour) % 23 < 7:
+                if not(self.groupId == "0") and int(datetime.today().hour) % 23 < 17:
                     self.teamspeak.autoQuit()
-                    self.bot.sendMessage(self.adminId, "autoquit")
                 time.sleep(60)
 
                 if datetime.today().hour == 17 and datetime.today().minute == 0 and not self.teamspeak.getTsRunning():

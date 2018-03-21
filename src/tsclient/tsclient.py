@@ -125,6 +125,7 @@ class Tsclient(object):
             self.sendWhoami()
 
     # stops Teamspeak
+    def tsStop(self):
         if not self.getTsRunning():
             self.writeTelegram("not in Teamspeak")
         else:
