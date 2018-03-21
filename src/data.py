@@ -1,5 +1,4 @@
 import pickle
-from datetime import datetime
 from collections import OrderedDict
 
 # class that contains necessary data for the Teamspeakbot

@@ -111,7 +111,7 @@ class Bot(object):
                                 int(full_command[1])
                             )
                         self.data.addQuote(newquote)
-                        self.bot.sendMessage(chat_id, '"' + newquote.toString() + '"' + " added")
+                        self.bot.sendMessage(chat_id, '"' + newquote + '"' + " added")
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
                         newquote = quote.Quote(
                                 full_command[1],
@@ -123,7 +123,7 @@ class Bot(object):
                         self.data.addQuote(
                             newquote
                         )
-                        self.bot.sendMessage(chat_id, '"' + newquote.toString() + '"' + " added")
+                        self.bot.sendMessage(chat_id, '"' + newquote + '"' + " added")
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addquote YEAR(optional) NAME QUOTE")
 
@@ -134,7 +134,7 @@ class Bot(object):
                         counter = 0
                         for year, quoteList in quotes.items():
                             for part in quoteList:
-                                string += "#" + str(counter) + " " + part.toString() + "\n"
+                                string += "#" + str(counter) + " " + part + "\n"
                                 counter += 1
                         if string == "":
                             self.bot.sendMessage(chat_id, "Quotes don't exist")
@@ -147,7 +147,7 @@ class Bot(object):
                         if part is None:
                             self.bot.sendMessage(chat_id, "Quote not found")
                         else:
-                            self.bot.sendMessage(chat_id, part.toString() + "\nwas removed")
+                            self.bot.sendMessage(chat_id, part + "\nwas removed")
                     else:
                         self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
                         self.bot.sendMessage(chat_id, "or /deletequote for a list of Message IDS ")
@@ -174,7 +174,7 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, message)
 
             elif self.groupId != chat_id:
-                print "different chat yo"
+                pass
 
             # quitting teamspeak
             elif command == '/quit':
@@ -223,11 +223,11 @@ class Bot(object):
         if year is None:
             for years in quotes:
                 for part in quotes[years]:
-                    string += part.toString() + "\n"
+                    string += part + "\n"
 
         elif year in quotes:
             for part in quotes[year]:
-                string += part.toString() + "\n"
+                string += part + "\n"
 
         if string == "" and year is None:
             self.bot.sendMessage(self.otherId, "Quotes don't exist")
