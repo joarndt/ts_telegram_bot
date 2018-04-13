@@ -117,9 +117,15 @@ class Tsclient(object):
             time.sleep(30)
 
             # initiate Clientquery connection
-            client = Client(self.auth)
-            client.subscribe()
-            self.client = client
+
+            while self.client is None:
+                try:
+                    client = Client(self.auth)
+                    client.subscribe()
+                    self.client = client
+                except:
+                    self.logger.debug("failed to init connection")
+                    time.sleep(1)
 
             # set boolean
             self.sendWhoami()
@@ -133,6 +139,7 @@ class Tsclient(object):
             self.writeTelegram("quitting Teamspeak")
 
             # close connection and quit Teamspeak
+            self.
             self.client.close()
             self.client = None
             while self.process.poll() is None:
