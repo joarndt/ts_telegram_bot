@@ -84,6 +84,7 @@ class Bot(object):
 
             elif chat_id == self.adminId:
                 if command == '/kill':
+                    print "why the fuck"
                     subprocess.Popen(['killall', 'python', 'python2'], stdout=subprocess.PIPE)
 
             # Handle other chats
