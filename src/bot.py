@@ -64,7 +64,7 @@ class Bot(object):
 
             command = msg['text'].split(' ')[0].split('@')[0]
             full_command = msg['text'].split(' ')
-
+            print msg["text"]
             # debug output
             self.logger.info(msg)
 
@@ -85,7 +85,7 @@ class Bot(object):
             elif chat_id == self.adminId:
                 if command == '/kill':
                     print "why the fuck"
-                    subprocess.Popen(['killall', 'python', 'python2'], stdout=subprocess.PIPE)
+                    #subprocess.Popen(['killall', 'python', 'python2'], stdout=subprocess.PIPE)
 
             # Handle other chats
             elif chat_id == self.otherId:
