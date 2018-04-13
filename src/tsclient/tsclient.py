@@ -114,7 +114,6 @@ class Tsclient(object):
 
             # starts Teamspeak
             self.process = subprocess.Popen(["ts3"], stdout=subprocess.PIPE, preexec_fn=os.setsid)
-            time.sleep(30)
 
             # initiate Clientquery connection
 
