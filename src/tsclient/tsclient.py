@@ -139,12 +139,11 @@ class Tsclient(object):
             self.writeTelegram("quitting Teamspeak")
 
             # close connection and quit Teamspeak
-            self.
             self.client.close()
             self.client = None
             while self.process.poll() is None:
                 os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
-            time.sleep(60)
+            time.sleep(30)
 
     # quits if bot is alone on the server
     def autoQuit(self):
