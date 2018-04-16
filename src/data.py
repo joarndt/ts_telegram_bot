@@ -93,7 +93,7 @@ class Data(object):
             data[key] = [birthday]
         self.writeBirthdays(data)
 
-    def deleteQuote(self, number):
+    def deleteBirthday(self, number):
         birthdays = self.readbirthdays()
         counter = 0
         for year, birthdayList in birthdays.items():
