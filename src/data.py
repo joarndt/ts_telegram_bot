@@ -79,8 +79,8 @@ class Data(object):
             self.writeBirthdays(OrderedDict())
             return self.readQuotes()
 
-    def deleteBirthdays(self):
-        self.writeBirthdayFile(OrderedDict())
+    def deleteBirthdayFile(self):
+        self.writeBirthdays(OrderedDict())
 
     def writeBirthdays(self, birthdays):
         with open(self.dataPath + 'birthdays.pkl', 'wb') as fp:
