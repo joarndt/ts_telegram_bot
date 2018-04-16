@@ -85,8 +85,6 @@ class Bot(object):
                 if command == '/kill':
                     time.sleep(1)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
-                elif command == '/deletebirthdayfile':
-                    self.data.deleteBirthdayFile()
 
             # Handle other chats
             elif chat_id == self.otherId:

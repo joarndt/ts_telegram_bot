@@ -79,9 +79,6 @@ class Data(object):
             self.writeBirthdays(OrderedDict())
             return self.readQuotes()
 
-    def deleteBirthdayFile(self):
-        self.writeBirthdays(OrderedDict())
-
     def writeBirthdays(self, birthdays):
         with open(self.dataPath + 'birthdays.pkl', 'wb') as fp:
             return pickle.dump(OrderedDict(sorted(birthdays.items())), fp)
@@ -97,13 +94,13 @@ class Data(object):
         self.writeBirthdays(data)
 
     def deleteBirthday(self, number):
-        birthdays = self.readbirthdays()
+        birthdays = self.readBirthdays()
         counter = 0
         for year, birthdayList in birthdays.items():
             for part in birthdayList:
                 if str(counter) == number:
                     birthdays[year].remove(part)
-                    self.writeBirthday(birthdays)
+                    self.writeBirthdays(birthdays)
                     return part
                 counter += 1
         return None
