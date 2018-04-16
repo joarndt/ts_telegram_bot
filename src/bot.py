@@ -152,7 +152,7 @@ class Bot(object):
                 elif command == '/addbirthday':
                     if full_command.__len__() == 5:
                         try:
-                            date = datetime(int(full_command[3], int(full_command[2]), int(full_command[1])))
+                            date = datetime(int(full_command[3]), int(full_command[2]), int(full_command[1]))
                             newBirthday = birthday.Birthday(full_command[4], date)
                             self.data.addBirthday(newBirthday)
                             self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
