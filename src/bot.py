@@ -158,6 +158,7 @@ class Bot(object):
                             date = datetime(int(full_command[3]), int(full_command[2]), int(full_command[1]))
                             self.bot.sendMessage(chat_id, "failed creating Birthday")
                             newBirthday = birthday.Birthday(full_command[4], date)
+                            self.bot.sendMessage(chat_id, str(newBirthday))
                             self.bot.sendMessage(chat_id, "failed adding to file")
                             self.data.addBirthday(newBirthday)
                             self.bot.sendMessage(chat_id, '"' + str(newBirthday) + '"' + " added")
