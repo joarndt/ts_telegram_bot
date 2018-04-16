@@ -9,7 +9,7 @@ class Birthday(object):
         self.date = date
 
     def __str__(self):
-        return self.date.strftime("%d %B %Y") + " - *" + self.name + "*"
+        return self.date.strftime("%d %B ") + self.date.year + " - *" + self.name + "*"
 
     def __eq__(self, date):
         return date.year == datetime.today().year \
