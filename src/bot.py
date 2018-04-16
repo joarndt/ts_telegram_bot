@@ -165,7 +165,7 @@ class Bot(object):
                     birthdays = self.data.readBirthdays()
                     if full_command.__len__() == 1:
                         self.printBirthdays(birthdays, numbers=True)
-                        self.bot.sendMessage(chat_id, "Use following syntax /deletebirthdays BIRTHDAY_ID")
+                        self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
 
                     elif full_command.__len__() == 2:
                         part = self.data.deleteBirthday(full_command[1])
@@ -174,7 +174,7 @@ class Bot(object):
                         else:
                             self.bot.sendMessage(chat_id, str(part) + "\nwas removed")
                     else:
-                        self.bot.sendMessage(chat_id, "Use following syntax /deletebirthdays BIRTHDAY_ID")
+                        self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
                         self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
 
                 else:
