@@ -1,6 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 from datetime import datetime
 import src.quote as quote
+import src.birthday as birthday
 import threading
 import time
 import urllib2
@@ -129,17 +130,8 @@ class Bot(object):
                 elif command == '/deletequote':
                     quotes = self.data.readQuotes()
                     if full_command.__len__() == 1:
-                        string = ""
-                        counter = 0
-                        for years in quotes:
-                            for part in quotes[years]:
-                                string += "#" + str(counter) + " " + str(part) + "\n"
-                                counter += 1
-                        if string == "":
-                            self.bot.sendMessage(chat_id, "Quotes don't exist")
-                        else:
-                            self.bot.sendMessage(chat_id, string)
-                            self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
+                        self.printQuotes(quotes, numbers=True)
+                        self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
 
                     elif full_command.__len__() == 2:
                         part = self.data.deleteQuote(full_command[1])
@@ -150,6 +142,40 @@ class Bot(object):
                     else:
                         self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
                         self.bot.sendMessage(chat_id, "or /deletequote for a list of Message IDS ")
+
+                if command == '/birthdays':
+                    if full_command.__len__() == 1:
+                        self.printBirthdays(self.data.readBirthdays())
+                    else:
+                        self.bot.sendMessage(chat_id, "only use following syntax: /birthdays")
+
+                elif command == '/addbirthday':
+                    if full_command.__len__() == 5:
+                        try:
+                            date = datetime(int(full_command[3], int(full_command[2]), int(full_command[1])))
+                            newBirthday = birthday.Birthday(full_command[4], date)
+                            self.data.addBirthday(newBirthday)
+                            self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
+                        except:
+                            self.bot.sendMessage(chat_id, "only use following syntax: /addbirthday dd mm yyyy NAME")
+                    else:
+                        self.bot.sendMessage(chat_id, "only use following syntax: /addbirthday dd mm yyyy NAME")
+
+                elif command == '/deletebirthday':
+                    birthdays = self.data.readBirthdays()
+                    if full_command.__len__() == 1:
+                        self.printBirthdays(birthdays, numbers=True)
+                        self.bot.sendMessage(chat_id, "Use following syntax /deletebirthdays BIRTHDAY_ID")
+
+                    elif full_command.__len__() == 2:
+                        part = self.data.deleteBirthday(full_command[1])
+                        if part is None:
+                            self.bot.sendMessage(chat_id, "Birthday not found")
+                        else:
+                            self.bot.sendMessage(chat_id, str(part) + "\nwas removed")
+                    else:
+                        self.bot.sendMessage(chat_id, "Use following syntax /deletebirthdays BIRTHDAY_ID")
+                        self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
 
                 else:
                     message = ""
@@ -216,12 +242,31 @@ class Bot(object):
 #           else:
 #               writeTelegram('bot is not in Teamspeak')
 
-    def printQuotes(self, quotes, year=None):
+    def printBirthdays(self, birthdays, numbers=False):
+        string = ""
+        counter = 0
+        for date in birthdays:
+            for part in birthdays[date]:
+                if numbers:
+                    string += "#" + str(counter) + " "
+                    counter += 1
+                string += str(part) + "\n"
+
+        if string == "":
+            self.bot.sendMessage(self.otherId, "No birthdays saved yet.")
+        else:
+            self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
+
+    def printQuotes(self, quotes, year=None, numbers=False):
 
         string = ""
+        counter = 0
         if year is None:
             for years in quotes:
                 for part in quotes[years]:
+                    if numbers:
+                        string += "#" + str(counter) + " "
+                        counter += 1
                     string += str(part) + "\n"
 
         elif year in quotes:

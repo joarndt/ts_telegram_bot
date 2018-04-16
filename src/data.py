@@ -69,6 +69,43 @@ class Data(object):
             return pickle.dump(self.botData, fp)
 
     # returns the Quotes
+    def readBirthdays(self):
+
+        # create or read user Info
+        try:
+            with open(self.dataPath + 'birthdays.pkl', 'rb') as fp:
+                return pickle.load(fp)
+        except (OSError, IOError, EOFError):
+            self.writeBirthdays(OrderedDict())
+            return self.readQuotes()
+
+    def writeBirthdays(self, birthdays):
+        with open(self.dataPath + 'birthdays.pkl', 'wb') as fp:
+            return pickle.dump(OrderedDict(sorted(birthdays.items())), fp)
+
+    def addBirthday(self, birthday):
+        key = birthday.getDate().month * 100 + birthday.getDate().day
+
+        data = self.readBirthdays()
+        if key in data:
+            data[key].append(birthday)
+        else:
+            data[key] = [birthday]
+        self.writeBirthdays(data)
+
+    def deleteQuote(self, number):
+        birthdays = self.readbirthdays()
+        counter = 0
+        for year, birthdayList in birthdays.items():
+            for part in birthdayList:
+                if str(counter) == number:
+                    birthdays[year].remove(part)
+                    self.writeBirthday(birthdays)
+                    return part
+                counter += 1
+        return None
+
+    # returns the Quotes
     def readQuotes(self):
 
         # create or read user Info

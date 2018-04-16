@@ -1,7 +1,7 @@
 from datetime import datetime
 
 #class for quote object
-class Quote(object):
+class Birthday(object):
 
     # init Ts client
     def __init__(self, name, date):
@@ -9,12 +9,15 @@ class Quote(object):
         self.date = date
 
     def __str__(self):
-        return "Happy Birthday *"  + self.name + "*"
+        return self.date.strftime("%d.%m.%y") + " - *" + self.name + "*: "
 
     def __eq__(self, date):
         return date.year == datetime.today().year \
                and date.month == datetime.today().month \
                and date.day == datetime.today().day
+
+    def greeting(self):
+        return "Happy Birthday *" + self.name + "*"
 
     def setName(self, name):
         self.name = name
