@@ -155,7 +155,7 @@ class Bot(object):
                             date = datetime(int(full_command[3]), int(full_command[2]), int(full_command[1]))
                             newBirthday = birthday.Birthday(full_command[4], date)
                             self.data.addBirthday(newBirthday)
-                            self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
+                            self.bot.sendMessage(chat_id, '"' + str(newBirthday) + '"' + " added")
                         except:
                             self.bot.sendMessage(chat_id, "only use following syntax: /addbirthday dd mm yyyy NAME")
                     else:
