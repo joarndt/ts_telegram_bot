@@ -79,6 +79,9 @@ class Data(object):
             self.writeBirthdays(OrderedDict())
             return self.readQuotes()
 
+    def deleteBirthdays(self):
+        self.writeBirthdayFile(OrderedDict())
+
     def writeBirthdays(self, birthdays):
         with open(self.dataPath + 'birthdays.pkl', 'wb') as fp:
             return pickle.dump(OrderedDict(sorted(birthdays.items())), fp)
