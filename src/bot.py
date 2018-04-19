@@ -39,7 +39,6 @@ class Bot(object):
             print "failed to init Bot"
             print "start with --clean"
 
-        print self.data.getToken()
         MessageLoop(self.bot, self.handle).run_as_thread()
         self.keepAlive()
 
@@ -304,14 +303,22 @@ class Bot(object):
         while True:
             try:
                 self.bot.getMe()
-                if not(self.groupId == "0") and int(datetime.today().hour) < 18:
+                now = datetime.today()
+                if now.hour == 8 and now.min == 0:
+                    birthdays = self.data.readBirthdays()
+                    for date in birthdays:
+                        for part in birthdays[date]:
+                            if part == now:
+                                part.wishHappyBirthday(self.bot, self.otherId)
+
+                if not(self.groupId == "0") and int(now.hour) < 18:
                     self.teamspeak.autoQuit()
                 time.sleep(60)
 
-                if datetime.today().hour == 18 and datetime.today().minute == 0 and not self.teamspeak.getTsRunning():
+                if now.hour == 18 and now.minute == 0 and not self.teamspeak.getTsRunning():
                     self.teamspeak.tsStart()
 
-                if datetime.today().hour == 13 and datetime.today().minute == 37:
+                if now.hour == 13 and now.minute == 37:
                     self.bot.sendMessage(self.otherId, "1337")
 
             except Exception:

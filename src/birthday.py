@@ -1,9 +1,8 @@
 from datetime import datetime
+from sticker import Sticker
 
-#class for quote object
 class Birthday(object):
 
-    # init Ts client
     def __init__(self, name, date):
         self.name = name
         self.date = date
@@ -13,12 +12,12 @@ class Birthday(object):
         return new.strftime("%d %B ") + str(self.date.year) + " - *" + self.name + "*"
 
     def __eq__(self, date):
-        return date.year == datetime.today().year \
-               and date.month == datetime.today().month \
-               and date.day == datetime.today().day
+        now = datetime.today()
+        return date.year == now.year and date.month == now.month and date.day == now.day
 
-    def greeting(self):
-        return "Happy Birthday *" + self.name + "*"
+    def wishHappyBirthday(self, bot, chat_id):
+        bot.sendMessage(chat_id, "Happy Birthday *" + self.name + "*", parse_mode="Markdown")
+        bot.sendSticker(chat_id, Sticker.getInstance().getCelebration())
 
     def setName(self, name):
         self.name = name

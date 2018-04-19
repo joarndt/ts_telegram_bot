@@ -3,7 +3,6 @@ from datetime import datetime
 #class for quote object
 class Quote(object):
 
-    # init Ts client
     def __init__(self, name, quote, year=datetime.today().year):
         self.name = name
         self.quote = quote
