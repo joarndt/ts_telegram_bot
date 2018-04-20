@@ -11,9 +11,8 @@ class Birthday(object):
         new = datetime(2000,self.date.month,self.date.day)
         return new.strftime("%d %B ") + str(self.date.year) + " - *" + self.name + "*"
 
-    def __eq__(self, date):
-        now = datetime.today()
-        return date.year == now.year and date.month == now.month and date.day == now.day
+    def isToday(self, now=datetime.today()):
+        return self.date.year == now.year and self.date.month == now.month and self.date.day == now.day
 
     def wishHappyBirthday(self, bot, chat_id):
         bot.sendMessage(chat_id, "Happy Birthday *" + self.name + "*", parse_mode="Markdown")

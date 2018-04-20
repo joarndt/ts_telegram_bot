@@ -93,7 +93,7 @@ class Tsclient(object):
                     # status output for telegram group    
                     elif message.is_response():
                         self.processStatus(message)
-          
+
             time.sleep(1)
     # inits messageThread
     def initMessageThread(self):

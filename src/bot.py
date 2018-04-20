@@ -304,11 +304,12 @@ class Bot(object):
             try:
                 self.bot.getMe()
                 now = datetime.today()
+
                 if now.hour == 8 and now.min == 0:
                     birthdays = self.data.readBirthdays()
                     for date in birthdays:
                         for part in birthdays[date]:
-                            if part == now:
+                            if part.isToday():
                                 part.wishHappyBirthday(self.bot, self.otherId)
 
                 if not(self.groupId == "0") and int(now.hour) < 18:
