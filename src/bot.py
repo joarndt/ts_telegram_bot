@@ -305,7 +305,7 @@ class Bot(object):
                 self.bot.getMe()
                 now = datetime.today()
 
-                if now.hour == 8 and now.min == 35:
+                if now.hour == 10 and now.min == 30:
                     birthdays = self.data.readBirthdays()
                     for date in birthdays:
                         for part in birthdays[date]:
@@ -314,13 +314,13 @@ class Bot(object):
 
                 if not(self.groupId == "0") and int(now.hour) < 18:
                     self.teamspeak.autoQuit()
-                time.sleep(60)
 
                 if now.hour == 18 and now.minute == 0 and not self.teamspeak.getTsRunning():
                     self.teamspeak.tsStart()
 
                 if now.hour == 13 and now.minute == 37:
                     self.bot.sendMessage(self.otherId, "1337")
+                time.sleep(60)
 
             except Exception:
                 self.logger.debug("Thread wanted to die")
