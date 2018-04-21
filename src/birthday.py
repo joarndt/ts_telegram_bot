@@ -1,6 +1,7 @@
 from datetime import datetime
 from sticker import Sticker
 
+
 class Birthday(object):
 
     def __init__(self, name, date):
@@ -8,7 +9,7 @@ class Birthday(object):
         self.date = date
 
     def __str__(self):
-        new = datetime(2000,self.date.month,self.date.day)
+        new = datetime(2000, self.date.month, self.date.day)
         return new.strftime("%d %B ") + str(self.date.year) + " - *" + self.name + "*"
 
     def isToday(self):

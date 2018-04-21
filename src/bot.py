@@ -305,12 +305,14 @@ class Bot(object):
                 self.bot.getMe()
                 now = datetime.today()
 
-                if now.hour == 11 and now.min == 0:
-                    birthdays = self.data.readBirthdays()
-                    for date in birthdays:
-                        for part in birthdays[date]:
-                            if part.isToday():
-                                part.wishHappyBirthday(self.bot, self.otherId)
+                birthdays = self.data.readBirthdays()
+                for date in birthdays:
+                    for part in birthdays[date]:
+                        print part.isToday()
+                        print "doing"
+                        if part.isToday():
+
+                            part.wishHappyBirthday(self.bot, self.otherId)
 
                 if not(self.groupId == "0") and int(now.hour) < 18:
                     self.teamspeak.autoQuit()
