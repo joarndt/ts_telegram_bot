@@ -77,7 +77,7 @@ class Data(object):
                 return pickle.load(fp)
         except (OSError, IOError, EOFError):
             self.writeBirthdays(OrderedDict())
-            return self.readQuotes()
+            return self.readBirthdays()
 
     def writeBirthdays(self, birthdays):
         with open(self.dataPath + 'birthdays.pkl', 'wb') as fp:

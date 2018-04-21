@@ -305,7 +305,7 @@ class Bot(object):
                 self.bot.getMe()
                 now = datetime.today()
 
-                if now.hour == 10 and now.min == 30:
+                if now.hour == 11 and now.min == 0:
                     birthdays = self.data.readBirthdays()
                     for date in birthdays:
                         for part in birthdays[date]:
