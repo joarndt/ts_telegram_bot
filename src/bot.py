@@ -83,6 +83,7 @@ class Bot(object):
             elif chat_id == self.adminId:
                 if command == '/kill':
                     time.sleep(1)
+                    subprocess.Popen(['killall', './ts3client_linux_amd64'], stdout=subprocess.PIPE)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
 
             # Handle other chats
@@ -98,7 +99,7 @@ class Bot(object):
 
                 elif command == '/addquote':
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
-
+                        
                         tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
                         newquote = quote.Quote(full_command[2], tosend, int(full_command[1]))
                         self.data.addQuote(newquote)
