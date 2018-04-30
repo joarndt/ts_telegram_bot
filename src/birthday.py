@@ -16,8 +16,9 @@ class Birthday(object):
         return self.date.month == datetime.today().month and self.date.day == datetime.today().day
 
     def wishHappyBirthday(self, bot, chat_id):
-        bot.sendMessage(chat_id, "Happy Birthday *" + self.name + "*", parse_mode="Markdown")
-        bot.sendSticker(chat_id, Sticker.getInstance().getCelebration())
+        if self.isToday():
+            bot.sendMessage(chat_id, "Happy Birthday *" + self.name + "*", parse_mode="Markdown")
+            bot.sendSticker(chat_id, Sticker.getInstance().getCelebration())
 
     def setName(self, name):
         self.name = name

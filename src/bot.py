@@ -99,26 +99,13 @@ class Bot(object):
                 elif command == '/addquote':
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
 
-                        newquote = quote.Quote(
-                                full_command[2],
-                                msg['text'].replace(full_command[0] +
-                                                    ' ' +
-                                                    full_command[1] +
-                                                    ' ' +
-                                                    full_command[2] +
-                                                    ' ', ''),
-                                int(full_command[1])
-                            )
+                        tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
+                        newquote = quote.Quote(full_command[2], tosend, int(full_command[1]))
                         self.data.addQuote(newquote)
                         self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
-                        newquote = quote.Quote(
-                                full_command[1],
-                                msg['text'].replace(full_command[0] +
-                                                    ' ' +
-                                                    full_command[1] +
-                                                    ' ', '')
-                            )
+                        tosend = msg['text'].replace(" ".join(full_command[:1]) + ' ', '')
+                        newquote = quote.Quote(full_command[1], tosend)
                         self.data.addQuote(
                             newquote
                         )
@@ -306,11 +293,9 @@ class Bot(object):
                 now = datetime.today()
 
                 if now.hour == 8 and now.minute == 0:
-                    birthdays = self.data.readBirthdays()
-                    for date in birthdays:
-                        for part in birthdays[date]:
-                            if part.isToday():
-                                part.wishHappyBirthday(self.bot, self.otherId)
+                    for values in self.data.readBirthdays().itervalues():
+                        for part in values:
+                            part.wishHappyBirthday(self.bot, self.otherId)
 
                 if not(self.groupId == "0") and int(now.hour) < 18:
                     self.teamspeak.autoQuit()
