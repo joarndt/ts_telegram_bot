@@ -106,12 +106,12 @@ class Bot(object):
                 elif command == '/addquote':
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
 
-                        tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
+                        tosend = msg['text'].replace(" ".join(full_command[:3]) + " ", '')
                         newquote = quote.Quote(full_command[2], tosend, int(full_command[1]))
                         self.data.addQuote(newquote)
                         self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
-                        tosend = msg['text'].replace(" ".join(full_command[:1]) + ' ', '')
+                        tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
                         newquote = quote.Quote(full_command[1], tosend)
                         self.data.addQuote(
                             newquote
