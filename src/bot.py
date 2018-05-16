@@ -245,14 +245,14 @@ class Bot(object):
     # print all birthdays trust me
     def printBirthdays(self, birthdays, numbers=False):
         num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
-        string = reduce(lambda x, y: x + y, map(num, enumerate(reduce(lambda x, y: x + y, birthdays.values(), ""))), "")
+        string = reduce(lambda x, y: x + y, map(num, enumerate(reduce(lambda x, y: x + y, birthdays.values(), []))), "")
         self.bot.sendMessage(self.otherId, "No birthdays saved yet." if string == "" else string, parse_mode="Markdown")
 
     # print all Quotes trust me
     def printQuotes(self, quotes, year=None, numbers=False):
 
         num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
-        qlist = quotes[year] if year is not None and year in quotes else reduce(lambda x, y: x + y, quotes.values(), "")
+        qlist = quotes[year] if year is not None and year in quotes else reduce(lambda x, y: x + y, quotes.values(), [])
         string = reduce(lambda x, y: x + y, map(num, enumerate(qlist)), "")
 
         if string == "":
