@@ -73,14 +73,14 @@ class Data(object):
 
         # create or read user Info
         try:
-            with open(self.dataPath + 'birthdays.pkl', 'rb') as fp:
+            with open(self.dataPath + 'birthdaays.pkl', 'rb') as fp:
                 return pickle.load(fp)
         except (OSError, IOError, EOFError):
             self.writeBirthdays(OrderedDict())
             return self.readBirthdays()
 
     def writeBirthdays(self, birthdays):
-        with open(self.dataPath + 'birthdays.pkl', 'wb') as fp:
+        with open(self.dataPath + 'birthdaays.pkl', 'wb') as fp:
             return pickle.dump(OrderedDict(sorted(birthdays.items())), fp)
 
     def addBirthday(self, birthday):
@@ -171,7 +171,6 @@ class Data(object):
             for part in usercolor:
                 number = ord(part)
                 if (number < 48 or number > 57) and (number < 97 or number > 102):
-                    self.writeTelegram('its not a valid Hex RGB code')
                     return False
 
         self.userInfo[uid] = ('[color=#' + usercolor + ']', username)

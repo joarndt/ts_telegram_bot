@@ -16,7 +16,6 @@ import subprocess
 
 logging.basicConfig(filename="log/bot.log", level=logging.DEBUG)
 
-
 class Bot(object):
 
     # init
@@ -39,16 +38,20 @@ class Bot(object):
             print "failed to init Bot"
             print "start with --clean"
 
+        # start messageloop
         MessageLoop(self.bot, self.handle).run_as_thread()
         self.keepAlive()
 
+        # get ids
         self.groupId = self.data.getChatId()
         self.adminId = self.data.getAdminId()
         self.otherId = self.data.getOtherId()
         self.initTeamspeak(self.data.getChatId())
 
+        # send startin message to admin
         if self.adminId != '0':
             self.bot.sendMessage(self.adminId, "Starting...")
+
         print 'I am listening ...'
 
     # Telegram bot loop
@@ -63,9 +66,11 @@ class Bot(object):
 
             command = msg['text'].split(' ')[0].split('@')[0]
             full_command = msg['text'].split(' ')
+
             # debug output
             self.logger.info(msg)
 
+            # set ids by chat
             if self.groupId == '0' and msg['text'] == 'teamspeak':
                 self.initTeamspeak(chat_id)
                 self.bot.sendMessage(chat_id, "Teamspeak chat set")
@@ -80,6 +85,7 @@ class Bot(object):
                 self.data.setOtherId(chat_id)
                 self.bot.sendMessage(chat_id, "Other chat set")
 
+            # Admin commands
             elif chat_id == self.adminId:
                 if command == '/kill':
                     time.sleep(1)
@@ -99,7 +105,7 @@ class Bot(object):
 
                 elif command == '/addquote':
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
-                        
+
                         tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
                         newquote = quote.Quote(full_command[2], tosend, int(full_command[1]))
                         self.data.addQuote(newquote)
@@ -165,28 +171,13 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
 
                 else:
-                    message = ""
-                    send = False
-                    for x in msg['text'].split(' '):
-                        if "i.imgur.com" in x and ".gifv" in x:
-                            message += x.replace(".gifv", ".mp4") + " "
-                            send = True
-                        elif "redd.it" in x or "reddit.com" in x:
-                            text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
-                            if text != "": send = True
-                            message += text
-                        elif "gfycat.com" in x:
-                            text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
-                            if text != "": send = True
-                            message += text
-                        else:
-                            message += x + " "
+                    self.handleLinks(self.otherId, msg['text'])
 
-                    if send:
-                        self.bot.sendMessage(chat_id, message)
 
+            # handle teamspeakchat
             elif self.groupId != chat_id:
-                pass
+                self.handleLinks(self.otherId, msg['text'])
+
 
             # quitting teamspeak
             elif command == '/quit':
@@ -229,43 +220,46 @@ class Bot(object):
 #           else:
 #               writeTelegram('bot is not in Teamspeak')
 
+    def handleLinks(self, chat_id, givenMessage=""):
+        message = ""
+        send = False
+        for x in givenMessage.split(' '):
+            if "i.imgur.com" in x and ".gifv" in x:
+                message += x.replace(".gifv", ".mp4") + " "
+                send = True
+            elif "redd.it" in x or "reddit.com" in x:
+                text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
+                if text != "": send = True
+                message += text
+            elif "gfycat.com" in x:
+                text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
+                if text != "": send = True
+                message += text
+            else:
+                message += x + " "
+
+        if send:
+            self.bot.sendMessage(chat_id, message)
+
+
+    # print all birthdays trust me
     def printBirthdays(self, birthdays, numbers=False):
-        string = ""
-        counter = 0
-        for date in birthdays:
-            for part in birthdays[date]:
-                if numbers:
-                    string += "#" + str(counter) + " "
-                    counter += 1
-                string += str(part) + "\n"
+        num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
+        string = reduce(lambda x, y: x + y, map(num, enumerate(reduce(lambda x, y: x + y, birthdays.values(), ""))), "")
+        self.bot.sendMessage(self.otherId, "No birthdays saved yet." if string == "" else string, parse_mode="Markdown")
 
-        if string == "":
-            self.bot.sendMessage(self.otherId, "No birthdays saved yet.")
-        else:
-            self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
-
+    # print all Quotes trust me
     def printQuotes(self, quotes, year=None, numbers=False):
 
-        string = ""
-        counter = 0
-        if year is None:
-            for years in quotes:
-                for part in quotes[years]:
-                    if numbers:
-                        string += "#" + str(counter) + " "
-                        counter += 1
-                    string += str(part) + "\n"
+        num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
+        qlist = quotes[year] if year is not None and year in quotes else reduce(lambda x, y: x + y, quotes.values(), "")
+        string = reduce(lambda x, y: x + y, map(num, enumerate(qlist)), "")
 
-        elif year in quotes:
-            for part in quotes[year]:
-                string += str(part) + "\n"
-
-        if string == "" and year is None:
-            self.bot.sendMessage(self.otherId, "Quotes don't exist")
-        elif string == "":
-            self.bot.sendMessage(self.otherId, "Quotes don't exist in " + str(year))
-        else:
-            self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
+        if string == "":
+            string = "Quotes don't exist"
+            if year is None:
+                string += " in " + str(year)
+        self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
 
     def isNumber(self, number):
         try:
@@ -277,8 +271,7 @@ class Bot(object):
     # init Teamspeak
     def initTeamspeak(self, chatId):
         if not(chatId == "0"):
-            self.teamspeak = ts.Tsclient(
-                 self.bot, chatId, self.data.getAuth(), self.debug)
+            self.teamspeak = ts.Tsclient(self.bot, chatId, self.data.getAuth(), self.debug)
         self.groupId = chatId
         self.data.setChatId(chatId)
 
@@ -340,9 +333,10 @@ class Bot(object):
     # sets usercolor in data Object
     def setUsercolor(self, user_id, command, msg):
         if command.__len__() == 2:
-            if self.data.setUsercolor(user_id, command[
-                              1], self.getUsername(msg)):
+            if self.data.setUsercolor(user_id, command[1], self.getUsername(msg)):
                 self.writeTelegram("Usercolor set")
+            else:
+                self.writeTelegram("This is not a valid Hex RGB code")
         else:
             self.writeTelegram(
                 "only use following syntax: /setusercolor ffffff")
