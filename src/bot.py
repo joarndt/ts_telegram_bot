@@ -253,7 +253,7 @@ class Bot(object):
             filelist = self.list_files("cache/", "mp4")
             if filelist is not None:
                 for x in filelist:
-                    self.bot.sendVideo(chat_id, "cache/" + x)
+                    self.bot.sendVideo(chat_id, open("cache/" + x, 'rb'))
                     subprocess.Popen(["rm", "-rf", "cache/" + x], stdout=subprocess.PIPE)
 
             time.sleep(1)
