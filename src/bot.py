@@ -1,5 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 from datetime import datetime
+from os import listdir
 import src.quote as quote
 import src.birthday as birthday
 import threading
@@ -11,6 +12,7 @@ from telepot.loop import MessageLoop
 import src.tsclient.tsclient as ts
 import logging
 import subprocess
+
 
 # Telegram bot class
 
@@ -235,12 +237,30 @@ class Bot(object):
                 text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
                 if text != "": send = True
                 message += text
+            elif ".webm" in x:
+                t = threading.Thread(target=self.convert(chat_id, x))
+                t.daemon = True
+                t.start()
             else:
                 message += x + " "
-
         if send:
             self.bot.sendMessage(chat_id, message)
 
+    def convert(self, chat_id, link=""):
+        subprocess.Popen(["./convert.sh", link], stdout=subprocess.PIPE)
+        counter = 0
+        while counter < 120:
+            filelist = self.list_files("cache/", "mp4")
+            if filelist is not None:
+                for x in filelist:
+                    self.bot.sendVideo(chat_id, "cache/" + x)
+                    subprocess.Popen(["rm", "-rf", "cache/" + x], stdout=subprocess.PIPE)
+
+            time.sleep(1)
+            counter += 1
+
+    def list_files(self, directory, extension):
+        return (f for f in listdir(directory) if f.endswith('.' + extension))
 
     # print all birthdays trust me
     def printBirthdays(self, birthdays, numbers=False):
