@@ -247,7 +247,7 @@ class Bot(object):
             self.bot.sendMessage(chat_id, message)
 
     def convert(self, chat_id, link=""):
-        subprocess.Popen(["./convert.sh", link], stdout=subprocess.PIPE)
+        subprocess.call(["./convert.sh", link], stdout=subprocess.PIPE)
         counter = 0
         while counter < 120:
             filelist = self.list_files("cache/", "mp4")
@@ -255,7 +255,7 @@ class Bot(object):
                 for x in filelist:
                     self.bot.sendVideo(chat_id, open("cache/" + x, 'rb'))
                     subprocess.Popen(["rm", "-rf", "cache/" + x], stdout=subprocess.PIPE)
-
+                return
             time.sleep(1)
             counter += 1
 
