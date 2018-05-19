@@ -91,7 +91,7 @@ class Bot(object):
             elif chat_id == self.adminId:
                 if command == '/kill':
                     time.sleep(1)
-                    subprocess.Popen(['killall', './ts3client_linux_amd64'], stdout=subprocess.PIPE)
+                    subprocess.Popen(['killall', 'ts3client_linux'], stdout=subprocess.PIPE)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
 
             # Handle other chats
@@ -241,6 +241,7 @@ class Bot(object):
                 t = threading.Thread(target=self.convert(chat_id, x))
                 t.daemon = True
                 t.start()
+                send = True
             else:
                 message += x + " "
         if send:
