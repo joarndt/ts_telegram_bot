@@ -231,6 +231,7 @@ class Bot(object):
         send = False
         for x in givenMessage.split(' '):
             if self.isValidUrl(x):
+                self.bot.sendMessage(self.adminId, "valid")
                 if "i.imgur.com" in x and ".gifv" in x:
                     message += x.replace(".gifv", ".mp4") + " "
                     send = True
@@ -256,6 +257,7 @@ class Bot(object):
                 else:
                     message += x + " "
             else:
+                self.bot.sendMessage(self.adminId, "not valid")
                 message += x + " "
         if send:
             self.bot.sendMessage(chat_id, message)
