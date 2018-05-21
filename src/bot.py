@@ -5,6 +5,7 @@ import src.quote as quote
 import src.birthday as birthday
 import threading
 import time
+import urllib
 import urllib2
 import re
 import telepot
@@ -278,7 +279,15 @@ class Bot(object):
             counter += 1
 
     def isValidUrl(self, url):
-        self.urlRegex.match(url)
+        if self.urlRegex.match(url):
+            try:
+                ret = urllib.urlopen(url)
+                if ret.code == 200:
+                    return True
+            except Exception:
+                pass
+        return False
+
 
     def list_files(self, directory, extension):
         return (f for f in listdir(directory) if f.endswith('.' + extension))
@@ -392,7 +401,7 @@ class Bot(object):
     def parseUrl(self, url, regex, cut):
         try:
             regex = re.compile(regex)
-            strings = regex.findall(urllib2.urlopen(url).read())
+            strings = regex.findall(urllib.urlopen(url).read())
             if strings.__len__() > 0:
                 return strings[0][cut:] + " "
         except Exception:
