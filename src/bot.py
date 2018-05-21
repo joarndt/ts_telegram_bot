@@ -23,6 +23,9 @@ class Bot(object):
     # init
     def __init__(self, data, debug=False):
 
+        #url checking regex
+        self.urlRegex = re.compile("^((https?://)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$)")
+
         # data and debugging
         self.debug = debug
         self.data = data
@@ -109,18 +112,17 @@ class Bot(object):
 
                 elif command == '/addquote':
                     if full_command.__len__() > 3 and self.isNumber(full_command[1]):
-
                         tosend = msg['text'].replace(" ".join(full_command[:3]) + " ", '')
                         newquote = quote.Quote(full_command[2], tosend, int(full_command[1]))
                         self.data.addQuote(newquote)
                         self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
+
                     elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
                         tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
                         newquote = quote.Quote(full_command[1], tosend)
-                        self.data.addQuote(
-                            newquote
-                        )
+                        self.data.addQuote(newquote)
                         self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
+
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addquote YEAR(optional) NAME QUOTE")
 
@@ -228,28 +230,39 @@ class Bot(object):
         message = ""
         send = False
         for x in givenMessage.split(' '):
-            if "i.imgur.com" in x and ".gifv" in x:
-                message += x.replace(".gifv", ".mp4") + " "
-                send = True
-            elif "redd.it" in x or "reddit.com" in x:
-                text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
-                if text != "": send = True
-                message += text
-            elif "gfycat.com" in x:
-                text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
-                if text != "": send = True
-                message += text
-            elif ".webm" in x:
-                t = threading.Thread(target=self.convert(chat_id, x))
-                t.daemon = True
-                t.start()
-                send = True
-            else:
-                message += x + " "
-        if send:
-            self.bot.sendMessage(chat_id, message)
+            if self.isValidUrl(x):
+                if "i.imgur.com" in x and ".gifv" in x:
+                    message += x.replace(".gifv", ".mp4") + " "
+                    send = True
+                elif "redd.it" in x or "reddit.com" in x:
+                    text = self.parseUrl(x, 'data-seek-preview.*DASH_600_K', 23)
+                    if text != "": send = True
+                    message += text
+                elif "gfycat.com" in x:
+                    text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
+                    if text != "": send = True
+                    message += text
+                elif "pr0gramm.com" in x:
+                    if ".gif" in x or ".mp4" in x:
+                        self.convertThread(chat_id, x)
+                        send = True
+                    else:
+                        message += x + " "
 
-    def convert(self, chat_id, link=""):
+                elif ".webm" in x:
+                    self.convertThread(chat_id, x)
+                    send = True
+                else:
+                    message += x + " "
+            if send:
+                self.bot.sendMessage(chat_id, message)
+
+    def convertThread(self, chat_id, link = ""):
+        t = threading.Thread(target=self.convert(chat_id, x))
+        t.daemon = True
+        t.start()
+
+    def convert(self, chat_id, link = ""):
         subprocess.call(["./convert.sh", link], stdout=subprocess.PIPE)
         counter = 0
         while counter < 120:
@@ -261,6 +274,17 @@ class Bot(object):
                 return
             time.sleep(1)
             counter += 1
+
+    def isValidUrl(self, url):
+        if self.urlRegex.match(url):
+            try:
+                ret = urllib2.urlopen(url)
+                if ret.code == 200:
+                    return True
+            except Exception:
+                pass
+        return False
+
 
     def list_files(self, directory, extension):
         return (f for f in listdir(directory) if f.endswith('.' + extension))
