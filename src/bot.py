@@ -5,7 +5,6 @@ import src.quote as quote
 import src.birthday as birthday
 import threading
 import time
-import urllib
 import urllib2
 import re
 import telepot
@@ -281,7 +280,7 @@ class Bot(object):
     def isValidUrl(self, url):
         if self.urlRegex.match(url):
             try:
-                ret = urllib.urlopen(url)
+                ret = urllib2.urlopen(url)
                 if ret.code == 200:
                     return True
             except Exception:
@@ -401,7 +400,7 @@ class Bot(object):
     def parseUrl(self, url, regex, cut):
         try:
             regex = re.compile(regex)
-            strings = regex.findall(urllib.urlopen(url).read())
+            strings = regex.findall(urllib2.urlopen(url).read())
             if strings.__len__() > 0:
                 return strings[0][cut:] + " "
         except Exception:
