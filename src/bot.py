@@ -394,7 +394,7 @@ class Bot(object):
     def parseUrl(self, url, regex, cut):
         try:
             regex = re.compile(regex)
-            hdr = {'User-Agent': "bot to convert reddit to direct video link"}
+            hdr = {'User-Agent': "Telegrambot which converts redditlinks to directlinks"}
             req = urllib2.Request(url, headers=hdr)
             strings = regex.findall(urllib2.urlopen(req).read())
             if strings.__len__() > 0:
