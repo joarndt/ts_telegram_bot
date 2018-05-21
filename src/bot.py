@@ -254,6 +254,8 @@ class Bot(object):
                     send = True
                 else:
                     message += x + " "
+            else:
+                message += x + " "
             if send:
                 self.bot.sendMessage(chat_id, message)
 
