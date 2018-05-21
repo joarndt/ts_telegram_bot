@@ -243,6 +243,7 @@ class Bot(object):
                     if text != "": send = True
                     message += text
                 elif "pr0gramm.com" in x:
+                    self.bot.sendMessage(self.adminId, "atleast he recognized pr0gramm")
                     if ".gif" in x or ".mp4" in x:
                         self.convertThread(chat_id, x)
                         send = True
