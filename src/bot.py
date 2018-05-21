@@ -278,14 +278,8 @@ class Bot(object):
             counter += 1
 
     def isValidUrl(self, url):
-        if self.urlRegex.match(url):
-            try:
-                ret = urllib2.urlopen(url)
-                if ret.code == 200:
-                    return True
-            except Exception:
-                pass
-        return False
+        return self.urlRegex.match(url)
+
 
 
     def list_files(self, directory, extension):
