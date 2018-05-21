@@ -400,11 +400,12 @@ class Bot(object):
     def parseUrl(self, url, regex, cut):
         try:
             regex = re.compile(regex)
-            strings = regex.findall(urllib2.urlopen(url).read())
+            hdr = {'User-Agent': "bot to convert reddit to direct video link"}
+            req = urllib2.Request(url, headers=hdr)
+            strings = regex.findall(urllib2.urlopen(req).read())
             if strings.__len__() > 0:
                 return strings[0][cut:] + " "
         except Exception:
             self.logger.debug(Exception)
-
         return ""
 
