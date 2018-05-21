@@ -243,7 +243,6 @@ class Bot(object):
                     if text != "": send = True
                     message += text
                 elif "pr0gramm.com" in x:
-                    self.bot.sendMessage(self.adminId, "atleast he recognized pr0gramm")
                     if ".gif" in x or ".mp4" in x:
                         self.convertThread(chat_id, x)
                         send = True
@@ -259,7 +258,7 @@ class Bot(object):
                 self.bot.sendMessage(chat_id, message)
 
     def convertThread(self, chat_id, link = ""):
-        t = threading.Thread(target=self.convert(chat_id, x))
+        t = threading.Thread(target=self.convert(chat_id, link))
         t.daemon = True
         t.start()
 
