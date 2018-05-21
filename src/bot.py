@@ -231,12 +231,10 @@ class Bot(object):
         send = False
         for x in givenMessage.split(' '):
             if self.isValidUrl(x):
-                self.bot.sendMessage(self.adminId, "valid")
                 if "i.imgur.com" in x and ".gifv" in x:
                     message += x.replace(".gifv", ".mp4") + " "
                     send = True
                 elif "redd.it" in x or "reddit.com" in x:
-                    self.bot.sendMessage(self.adminId, "reddit?")
                     text = self.parseUrl(x, 'scrubberThumbSource.*DASH_600_K', 22)
                     if text != "": send = True
                     message += text
@@ -257,7 +255,6 @@ class Bot(object):
                 else:
                     message += x + " "
             else:
-                self.bot.sendMessage(self.adminId, "not valid")
                 message += x + " "
         if send:
             self.bot.sendMessage(chat_id, message)
@@ -281,15 +278,7 @@ class Bot(object):
             counter += 1
 
     def isValidUrl(self, url):
-        if self.urlRegex.match(url):
-            try:
-                ret = urllib2.urlopen(url)
-                if ret.code == 200:
-                    return True
-            except Exception:
-                pass
-        return False
-
+        self.urlRegex.match(url)
 
     def list_files(self, directory, extension):
         return (f for f in listdir(directory) if f.endswith('.' + extension))
