@@ -256,8 +256,8 @@ class Bot(object):
                     message += x + " "
             else:
                 message += x + " "
-            if send:
-                self.bot.sendMessage(chat_id, message)
+        if send:
+            self.bot.sendMessage(chat_id, message)
 
     def convertThread(self, chat_id, link = ""):
         t = threading.Thread(target=self.convert(chat_id, link))
