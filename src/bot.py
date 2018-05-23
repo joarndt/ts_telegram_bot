@@ -257,6 +257,8 @@ class Bot(object):
             else:
                 message += x + " "
         if video:
+            if message != "":
+                message = self.getUsername(givenMessage) + message
             self.sendVideo(chat_id, message)
         elif send:
             self.bot.sendMessage(chat_id, message)
