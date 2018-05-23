@@ -230,7 +230,7 @@ class Bot(object):
         message = ""
         send = False
         video = False
-        for x in msg.["text"].split(' '):
+        for x in msg["text"].split(' '):
             if self.isValidUrl(x):
                 if "i.imgur.com" in x and ".gifv" in x:
                     message += x.replace(".gifv", ".mp4") + " "
