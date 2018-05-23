@@ -97,7 +97,7 @@ class Bot(object):
                     subprocess.Popen(['killall', 'ts3client_linux_amd64'], stdout=subprocess.PIPE)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
                 else:
-                    self.handleLinks(self.otherId, msg["text"])
+                    self.handleLinks(self.otherId, msg)
 
             # Handle other chats
             elif chat_id == self.otherId:
@@ -177,7 +177,7 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
 
                 else:
-                    self.handleLinks(self.otherId, msg['text'])
+                    self.handleLinks(self.otherId, msg)
 
 
             # handle teamspeakchat
@@ -226,11 +226,11 @@ class Bot(object):
 #           else:
 #               writeTelegram('bot is not in Teamspeak')
 
-    def handleLinks(self, chat_id, givenMessage=""):
+    def handleLinks(self, chat_id, msg):
         message = ""
         send = False
         video = False
-        for x in givenMessage.split(' '):
+        for x in msg.["text"].split(' '):
             if self.isValidUrl(x):
                 if "i.imgur.com" in x and ".gifv" in x:
                     message += x.replace(".gifv", ".mp4") + " "
@@ -258,7 +258,7 @@ class Bot(object):
                 message += x + " "
         if video:
             if message != "":
-                message = self.getUsername(givenMessage) + message
+                message = self.getUsername(msg) + message
             self.sendVideo(chat_id, message)
         elif send:
             self.bot.sendMessage(chat_id, message)
