@@ -229,6 +229,7 @@ class Bot(object):
     def handleLinks(self, chat_id, givenMessage=""):
         message = ""
         send = False
+        video = False
         for x in givenMessage.split(' '):
             if self.isValidUrl(x):
                 if "i.imgur.com" in x and ".gifv" in x:
@@ -244,38 +245,32 @@ class Bot(object):
                     message += text
                 elif "pr0gramm.com" in x:
                     if ".gif" in x or ".mp4" in x:
-                        self.convertThread(chat_id, x)
-                        send = True
+                        self.convert(x)
+                        video = True
                     else:
                         message += x + " "
-
                 elif ".webm" in x:
-                    self.convertThread(chat_id, x)
-                    send = True
+                    self.convert(x)
+                    video = True
                 else:
                     message += x + " "
             else:
                 message += x + " "
-        if send:
+        if video:
+            self.sendVideo(chat_id, message)
+        elif send:
             self.bot.sendMessage(chat_id, message)
 
-    def convertThread(self, chat_id, link = ""):
-        t = threading.Thread(target=self.convert(chat_id, link))
-        t.daemon = True
-        t.start()
-
-    def convert(self, chat_id, link = ""):
+    def convert(self, link=""):
         subprocess.call(["./convert.sh", link], stdout=subprocess.PIPE)
-        counter = 0
-        while counter < 120:
-            filelist = self.list_files("cache/", "mp4")
-            if filelist is not None:
-                for x in filelist:
-                    self.bot.sendVideo(chat_id, open("cache/" + x, 'rb'))
-                    subprocess.Popen(["rm", "-rf", "cache/" + x], stdout=subprocess.PIPE)
-                return
-            time.sleep(1)
-            counter += 1
+
+    def sendVideo(self, chat_id, caption=""):
+        filelist = self.list_files("cache/", "mp4")
+        if filelist is not None:
+            for x in filelist:
+                self.bot.sendVideo(chat_id, open("cache/" + x, 'rb'), caption=caption)
+                subprocess.Popen(["rm", "-rf", "cache/" + x], stdout=subprocess.PIPE)
+        return
 
     def isValidUrl(self, url):
         return self.urlRegex.match(url)
