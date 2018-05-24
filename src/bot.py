@@ -236,7 +236,7 @@ class Bot(object):
                     message += x.replace(".gifv", ".mp4") + " "
                     send = True
                 elif "redd.it" in x or "reddit.com" in x:
-                    text = self.parseUrl(x, 'scrubberThumbSource.*DASH_600_K', 22)
+                    text = self.parseUrl(x, "https://[^\"]*DASH_600_K", 0)
                     if text != "": send = True
                     message += text
                 elif "gfycat.com" in x:
