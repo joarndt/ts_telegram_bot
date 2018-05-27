@@ -182,7 +182,7 @@ class Bot(object):
 
             # handle teamspeakchat
             elif self.groupId != chat_id:
-                self.handleLinks(self.otherId, msg['text'])
+                self.handleLinks(self.otherId, msg)
 
 
             # quitting teamspeak
