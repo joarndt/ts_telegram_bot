@@ -243,12 +243,6 @@ class Bot(object):
                     text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
                     if text != "": send = True
                     message += text
-                elif "pr0gramm.com" in x:
-                    if ".gif" in x or ".mp4" in x:
-                        self.convert(x)
-                        video = True
-                    else:
-                        message += x + " "
                 elif ".webm" in x:
                     self.convert(x)
                     video = True
