@@ -66,6 +66,9 @@ class Bot(object):
         chat_id = msg['chat']['id']
         user_id = msg['from']['id']
 
+        if 'sticker' in msg and chat_id == self.adminId:
+            self.bot.sendMessage(self.adminId, msg['sticker']['file_id'])
+
         # checks for textmessage
         if 'text' in msg:
 

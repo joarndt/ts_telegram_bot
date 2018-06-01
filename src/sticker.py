@@ -18,7 +18,7 @@ class Sticker(object):
         else:
 
             Sticker.__instance = self
+            self.celebration = "CAADAgADNQIAAhOqqAc2YWgCd29ZcwI"
 
     def getCelebration(self):
-
-        return "CAADAgADNQIAAhOqqAc2YWgCd29ZcwI"
+        return self.celebration
