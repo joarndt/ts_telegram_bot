@@ -214,6 +214,10 @@ class Bot(object):
                     regex = re.compile(u'[\W][U][0][0][0][0-f][0-f][0-f][0-f][0-f]')
                     message = regex.sub('', msg['text'].encode('unicode-escape'))
 
+                    for x in message.split(' '):
+                        if self.isValidUrl(x):
+                            message = message.replace(x, '[URL]' + x + '[/URL]')
+
                     if message.replace(" ", "") != "":
                         self.teamspeak.writeTeamspeak(
                             self.userFormat
