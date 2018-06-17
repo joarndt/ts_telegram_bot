@@ -85,7 +85,6 @@ class Data(object):
 
     def addBirthday(self, birthday):
         key = birthday.getDate().month * 100 + birthday.getDate().day
-
         data = self.readBirthdays()
         if key in data:
             data[key].append(birthday)
@@ -107,7 +106,6 @@ class Data(object):
 
     # returns the Quotes
     def readQuotes(self):
-
         # create or read user Info
         try:
             with open(self.dataPath + 'quotes.pkl', 'rb') as fp:

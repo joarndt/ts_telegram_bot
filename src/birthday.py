@@ -18,7 +18,7 @@ class Birthday(object):
     def wishHappyBirthday(self, bot, chat_id):
         if self.isToday():
             bot.sendMessage(chat_id, "Happy Birthday *" + self.name + "*", parse_mode="Markdown")
-            bot.sendSticker(chat_id, Sticker.getInstance().getCelebration())
+            bot.sendSticker(chat_id, Sticker.getInstance().getSticker("celebration"))
 
     def setName(self, name):
         self.name = name

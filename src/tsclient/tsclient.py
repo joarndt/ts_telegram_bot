@@ -142,13 +142,12 @@ class Tsclient(object):
             self.client = None
             while self.process.poll() is None:
                 os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
-                os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
             time.sleep(30)
 
     # quits if bot is alone on the server
     def autoQuit(self):
         self.logger.info("autoquit")
-        if self.tsClients.__len__() == 1 and self.invokerid in self.tsClients and self.getTsRunning():
+        if len(self.tsClients) == 1 and self.invokerid in self.tsClients and self.getTsRunning():
             self.tsStop()
 
     # sends whoami command for verification
@@ -172,7 +171,7 @@ class Tsclient(object):
             if 'client_nickname' in part.keys() and 'clid' in part.keys():
 
                 # get new user if somebody joined
-                if part['clid'] not in self.tsClients and self.tsClients.__len__() > 0:
+                if part['clid'] not in self.tsClients and len(self.tsClients) > 0:
                     self.writeTelegram(part['client_nickname'] + " joined Teamspeak")
 
                 # build dictionary

@@ -72,8 +72,8 @@ class Bot(object):
         # checks for textmessage
         if 'text' in msg:
 
-            command = msg['text'].split(' ')[0].split('@')[0]
-            full_command = msg['text'].split(' ')
+            args = msg['text'].split(' ')
+            com = msg['text'].split(' ')[0].split('@')[0]
 
             # debug output
             self.logger.info(msg)
@@ -95,7 +95,7 @@ class Bot(object):
 
             # Admin commands
             elif chat_id == self.adminId:
-                if command == '/kill':
+                if com == '/kill':
                     time.sleep(1)
                     subprocess.Popen(['killall', 'ts3client_linux_amd64'], stdout=subprocess.PIPE)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
@@ -105,38 +105,38 @@ class Bot(object):
             # Handle other chats
             elif chat_id == self.otherId:
 
-                if command == '/quotes':
-                    if full_command.__len__() == 2 and self.isNumber(full_command[1]):
-                        self.printQuotes(self.data.readQuotes(), int(full_command[1]))
-                    elif full_command.__len__() == 1:
+                if com == '/quotes':
+                    if len(args) == 2 and self.isNumber(args[1]):
+                        self.printQuotes(self.data.readQuotes(), int(args[1]))
+                    elif len(args) == 1:
                         self.printQuotes(self.data.readQuotes())
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /quotes YEAR")
 
-                elif command == '/addquote':
-                    if full_command.__len__() > 3 and self.isNumber(full_command[1]):
-                        tosend = msg['text'].replace(" ".join(full_command[:3]) + " ", '')
-                        newquote = quote.Quote(full_command[2], tosend, int(full_command[1]))
+                elif com == '/addquote':
+                    if len(args) > 3 and self.isNumber(args[1]):
+                        tosend = msg['text'].replace(" ".join(args[:3]) + " ", '')
+                        newquote = quote.Quote(args[2], tosend, int(args[1]))
                         self.data.addQuote(newquote)
                         self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
 
-                    elif full_command.__len__() >= 3 and not self.isNumber(full_command[1]):
-                        tosend = msg['text'].replace(" ".join(full_command[:2]) + ' ', '')
-                        newquote = quote.Quote(full_command[1], tosend)
+                    elif len(args) >= 3 and not self.isNumber(args[1]):
+                        tosend = msg['text'].replace(" ".join(args[:2]) + ' ', '')
+                        newquote = quote.Quote(args[1], tosend)
                         self.data.addQuote(newquote)
                         self.bot.sendMessage(chat_id, '"' + str(newquote) + '"' + " added")
 
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addquote YEAR(optional) NAME QUOTE")
 
-                elif command == '/deletequote':
+                elif com == '/deletequote':
                     quotes = self.data.readQuotes()
-                    if full_command.__len__() == 1:
+                    if len(args) == 1:
                         self.printQuotes(quotes, numbers=True)
                         self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
 
-                    elif full_command.__len__() == 2:
-                        part = self.data.deleteQuote(full_command[1])
+                    elif len(args) == 2:
+                        part = self.data.deleteQuote(args[1])
                         if part is None:
                             self.bot.sendMessage(chat_id, "Quote not found")
                         else:
@@ -145,17 +145,17 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
                         self.bot.sendMessage(chat_id, "or /deletequote for a list of Message IDS ")
 
-                if command == '/birthdays':
-                    if full_command.__len__() == 1:
+                if com == '/birthdays':
+                    if len(args) == 1:
                         self.printBirthdays(self.data.readBirthdays())
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /birthdays")
 
-                elif command == '/addbirthday':
-                    if full_command.__len__() == 5:
+                elif com == '/addbirthday':
+                    if len(args) == 5:
                         try:
-                            date = datetime(int(full_command[3]), int(full_command[2]), int(full_command[1]))
-                            newBirthday = birthday.Birthday(full_command[4], date)
+                            date = datetime(int(args[3]), int(args[2]), int(args[1]))
+                            newBirthday = birthday.Birthday(args[4], date)
                             self.data.addBirthday(newBirthday)
                             self.bot.sendMessage(chat_id, '"' + str(newBirthday) + '"' + " added")
                         except:
@@ -163,14 +163,14 @@ class Bot(object):
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /addbirthday dd mm yyyy NAME")
 
-                elif command == '/deletebirthday':
+                elif com == '/deletebirthday':
                     birthdays = self.data.readBirthdays()
-                    if full_command.__len__() == 1:
+                    if len(args) == 1:
                         self.printBirthdays(birthdays, numbers=True)
                         self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
 
-                    elif full_command.__len__() == 2:
-                        part = self.data.deleteBirthday(full_command[1])
+                    elif len(args) == 2:
+                        part = self.data.deleteBirthday(args[1])
                         if part is None:
                             self.bot.sendMessage(chat_id, "Birthday not found")
                         else:
@@ -189,26 +189,26 @@ class Bot(object):
 
 
             # quitting teamspeak
-            elif command == '/quit':
+            elif com == '/quit':
                 self.teamspeak.tsStop()
 
             # joining teamspeak
-            elif command == '/join':
+            elif com == '/join':
                 self.teamspeak.tsStart()
 
             elif self.teamspeak.getTsRunning():
 
                 # writes command for current channelclients
-                if command == '/status':
+                if com == '/status':
                     self.teamspeak.sendStatus()
 
                 # set username for current id
-                elif command == '/setusername':
-                    self.setUsername(user_id, full_command)
+                elif com == '/setusername':
+                    self.setUsername(user_id, args)
 
                 # set usercolor for current id
-                elif command == '/setusercolor':
-                    self.setUsercolor(user_id, full_command, msg)
+                elif com == '/setusercolor':
+                    self.setUsercolor(user_id, args, msg)
 
                 # builds textmessages and writes it into teamspeakchat
                 else:
@@ -230,8 +230,6 @@ class Bot(object):
                             + message.decode('unicode-escape')
                         )
 
-#           else:
-#               writeTelegram('bot is not in Teamspeak')
 
     def handleLinks(self, chat_id, msg):
         message = ""
@@ -363,18 +361,18 @@ class Bot(object):
         return "no username found"
 
     # sets username in data Object
-    def setUsername(self, user_id, command):
-        if command.__len__() == 2:
-            self.data.setUsername(user_id, command[1])
+    def setUsername(self, user_id, args):
+        if len(args) == 2:
+            self.data.setUsername(user_id, args[1])
             self.writeTelegram("Username set")
         else:
             self.writeTelegram(
                 "only use following syntax: /setusername USERNAME")
 
     # sets usercolor in data Object
-    def setUsercolor(self, user_id, command, msg):
-        if command.__len__() == 2:
-            if self.data.setUsercolor(user_id, command[1], self.getUsername(msg)):
+    def setUsercolor(self, user_id, args, msg):
+        if len(args) == 2:
+            if self.data.setUsercolor(user_id, args[1], self.getUsername(msg)):
                 self.writeTelegram("Usercolor set")
             else:
                 self.writeTelegram("This is not a valid Hex RGB code")
@@ -395,7 +393,7 @@ class Bot(object):
             hdr = {'User-Agent': "Telegrambot which converts redditlinks to directlinks"}
             req = urllib2.Request(url, headers=hdr)
             strings = regex.findall(urllib2.urlopen(req).read())
-            if strings.__len__() > 0:
+            if len(strings) > 0:
                 return strings[0][cut:] + " "
         except Exception:
             self.logger.debug(Exception)

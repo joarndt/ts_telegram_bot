@@ -1,3 +1,5 @@
+import random
+
 
 class Sticker(object):
     # Here will be the instance stored.
@@ -18,7 +20,12 @@ class Sticker(object):
         else:
 
             Sticker.__instance = self
-            self.celebration = "CAADAgADNQIAAhOqqAc2YWgCd29ZcwI"
+            self.stickers = dict()
+            self.stickers["celebration"] = ["CAADAgADNQIAAhOqqAc2YWgCd29ZcwI", "CAADAgADNAIAAhOqqAfQtrbRnagpMQI"]
+            self.stickers["fuckoff"] = ["CAADAgADLAIAAhOqqAdDHCDLDApaWQI"]
 
-    def getCelebration(self):
-        return self.celebration
+    def getSticker(self, string=""):
+        if string in self.stickers and self.stickers[string] is not []:
+            return self.stickers[string][random.randint(0, len(self.stickers[string]) - 1)]
+        return ""
+
