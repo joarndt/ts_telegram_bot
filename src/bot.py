@@ -241,7 +241,7 @@ class Bot(object):
                     message += x.replace(".gifv", ".mp4") + " "
                     send = True
                 elif "redd.it" in x or "reddit.com" in x:
-                    text = self.parseUrl(x, "https://[^\"]*DASH_600_K", 0)
+                    text = self.parseUrl(x, "https://[^\"]*DASH_600_K")
                     if text != "": send = True
                     message += text
                 elif "gfycat.com" in x:
@@ -276,8 +276,6 @@ class Bot(object):
     def isValidUrl(self, url):
         return self.urlRegex.match(url)
 
-
-
     def list_files(self, directory, extension):
         return (f for f in listdir(directory) if f.endswith('.' + extension))
 
@@ -285,19 +283,17 @@ class Bot(object):
     def printBirthdays(self, birthdays, numbers=False):
         num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
         string = reduce(lambda x, y: x + y, map(num, enumerate(reduce(lambda x, y: x + y, birthdays.values(), []))), "")
-        self.bot.sendMessage(self.otherId, "No birthdays saved yet." if string == "" else string, parse_mode="Markdown")
+        string += "No birthdays saved yet." if string == "" else ""
+
+        self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
 
     # print all Quotes trust me
     def printQuotes(self, quotes, year=None, numbers=False):
-
         num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
         qlist = quotes[year] if year is not None and year in quotes else reduce(lambda x, y: x + y, quotes.values(), [])
         string = reduce(lambda x, y: x + y, map(num, enumerate(qlist)), "")
+        string += ("Quotes don't exist" + (" in " + str(year) if year is None else ""))if string == "" else ""
 
-        if string == "":
-            string = "Quotes don't exist"
-            if year is None:
-                string += " in " + str(year)
         self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
 
     def isNumber(self, number):
@@ -387,7 +383,8 @@ class Bot(object):
             return self.data.getUsercolor(msg['from']['id']) + self.getUsername(msg)
         return self.getUsername(msg)
 
-    def parseUrl(self, url, regex, cut):
+    # parsingUrl with regex
+    def parseUrl(self, url, regex, cut=0):
         try:
             regex = re.compile(regex)
             hdr = {'User-Agent': "Telegrambot which converts redditlinks to directlinks"}
