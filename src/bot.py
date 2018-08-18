@@ -180,7 +180,7 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
                         self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
                 elif com == '/yt':
-                    if len(args == 4):
+                    if len(args) == 4:
                         if "youtube" in args[1] or "youtu.be" in args[1]:
                             regex = re.compile("[0-5][0-9]:[0-5][0-9]")
                             if regex.match(args[2]) and regex.match[3]:
