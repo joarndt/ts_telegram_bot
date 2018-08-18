@@ -9,6 +9,7 @@ import urllib2
 import re
 import telepot
 from telepot.loop import MessageLoop
+from operator import sub
 import src.tsclient.tsclient as ts
 import logging
 import subprocess
@@ -178,6 +179,17 @@ class Bot(object):
                     else:
                         self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
                         self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
+                elif com == '/yt':
+                    if len(args == 4):
+                        if "youtube" in args[1] or "youtu.be" in args[1]:
+                            regex = re.compile("[0-5][0-9]:[0-5][0-9]")
+                            if regex.match(args[2]) and regex.match[3]:
+                                duration = map(sub, args[2].splitt(":"), args[3].splitt(":"))
+                                if duration[0] >= 0 and duration[1] >= 0:
+                                    durString = str(duration[0]) + ":" + str(duration[1])
+                                    subprocess.call(["./youtube-cut.sh", args[2], durString], stdout=subprocess.PIPE)
+                        self.sendVideo(chat_id, "")
+
 
                 else:
                     self.handleLinks(self.otherId, msg)
