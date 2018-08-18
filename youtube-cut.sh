@@ -5,7 +5,7 @@ audio="135"
 
 if [[ $4 == "-a" ]]; then
 	filename="youtube/$(basename "$1").mp4"
-	audio="19"
+	audio="22"
 fi
 
 outputname="$(md5sum <<< ${2}_${3}${filename})"
