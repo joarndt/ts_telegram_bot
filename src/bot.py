@@ -183,7 +183,7 @@ class Bot(object):
                     if len(args) == 4:
                         if "youtube" in args[1] or "youtu.be" in args[1]:
                             regex = re.compile("[0-5][0-9]:[0-5][0-9]")
-                            if regex.match(args[2]) and regex.match[3]:
+                            if regex.match(args[2]) and regex.match(args[3]):
                                 duration = map(sub, args[2].splitt(":"), args[3].splitt(":"))
                                 if duration[0] >= 0 and duration[1] >= 0:
                                     durString = str(duration[0]) + ":" + str(duration[1])
