@@ -184,7 +184,7 @@ class Bot(object):
                         if "youtube" in args[1] or "youtu.be" in args[1]:
                             regex = re.compile("[0-5][0-9]:[0-5][0-9]")
                             if regex.match(args[2]) and regex.match(args[3]):
-                                duration = map(sub, args[2].splitt(":"), args[3].splitt(":"))
+                                duration = map(sub, args[2].split(":"), args[3].split(":"))
                                 if duration[0] >= 0 and duration[1] >= 0:
                                     durString = str(duration[0]) + ":" + str(duration[1])
                                     subprocess.call(["./youtube-cut.sh", args[2], durString], stdout=subprocess.PIPE)
