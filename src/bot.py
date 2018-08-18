@@ -248,8 +248,7 @@ class Bot(object):
                     duration = map(sub, map(int, args[3].split(":")), map(int, args[2].split(":")), )
                     if duration[0] >= 0 and duration[1] >= 0:
                         durString = str(duration[0]) + ":" + str(duration[1])
-                        if args > 4 and "audio" in args[4]:
-                            print "imhere"
+                        if len(args) > 4 and "audio" in args[4]:
                             subprocess.call(["./youtube-cut.sh", args[1], args[2], durString, "-a"], stdout=subprocess.PIPE)
                         else:
                             subprocess.call(["./youtube-cut.sh", args[1], args[2], durString], stdout=subprocess.PIPE)
