@@ -100,6 +100,8 @@ class Bot(object):
                     time.sleep(1)
                     subprocess.Popen(['killall', 'ts3client_linux_amd64'], stdout=subprocess.PIPE)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
+                elif com == '/yt':
+                    self.youtubeCut(args)
                 else:
                     self.handleLinks(self.otherId, msg)
 
@@ -200,15 +202,7 @@ class Bot(object):
             # handle teamspeakchat
             elif self.groupId != chat_id:
                 if com == '/yt':
-                    if len(args) == 4:
-                        if "youtube" in args[1] or "youtu.be" in args[1]:
-                            regex = re.compile("[0-5][0-9]:[0-5][0-9]")
-                            if regex.match(args[2]) and regex.match(args[3]):
-                                duration = map(sub, map(int, args[3].split(":")), map(int, args[2].split(":")), )
-                                if duration[0] >= 0 and duration[1] >= 0:
-                                    durString = str(duration[0]) + ":" + str(duration[1])
-                                    subprocess.call(["./youtube-cut.sh", args[1], args[2], durString], stdout=subprocess.PIPE)
-                        self.sendVideo(self.otherId, "")
+                    self.youtubeCut(args)
                 else:
                     self.handleLinks(self.otherId, msg)
 
@@ -254,6 +248,21 @@ class Bot(object):
                             + self.chatFormat
                             + message.decode('unicode-escape')
                         )
+
+
+    def youtubeCut(self, args):
+        if len(args) >= 4:
+            if "youtube" in args[1] or "youtu.be" in args[1]:
+                regex = re.compile("[0-5][0-9]:[0-5][0-9]")
+                if regex.match(args[2]) and regex.match(args[3]):
+                    duration = map(sub, map(int, args[3].split(":")), map(int, args[2].split(":")), )
+                    if duration[0] >= 0 and duration[1] >= 0:
+                        durString = str(duration[0]) + ":" + str(duration[1])
+                        if args > 4 and args[4] == "audio":
+                            subprocess.call(["./youtube-cut.sh", args[1], args[2], durString, "-a"], stdout=subprocess.PIPE)
+                        else:
+                            subprocess.call(["./youtube-cut.sh", args[1], args[2], durString], stdout=subprocess.PIPE)
+            self.sendVideo(self.otherId, "")
 
 
     def handleLinks(self, chat_id, msg):
