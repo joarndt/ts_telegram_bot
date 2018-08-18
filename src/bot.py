@@ -187,6 +187,7 @@ class Bot(object):
                                 duration = map(sub, map(int, args[2].split(":")), map(int, args[3].split(":")))
                                 if duration[0] >= 0 and duration[1] >= 0:
                                     durString = str(duration[0]) + ":" + str(duration[1])
+                                    print durString
                                     subprocess.call(["./youtube-cut.sh", args[2], durString], stdout=subprocess.PIPE)
                         self.sendVideo(chat_id, "")
 
