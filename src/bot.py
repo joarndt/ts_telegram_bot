@@ -253,6 +253,8 @@ class Bot(object):
                         if duration > 0:
                             durString = str(duration / 100) + ":" + str(duration % 100)
                             begString = str(num1 / 100) + ":" + str(num1 % 100)
+                            print durString
+                            print begString
                             if len(args) > 4 and "audio" in args[4]:
                                 subprocess.call(["./youtube-cut.sh", args[1], begString, durString, "-a"], stdout=subprocess.PIPE)
                             else:
@@ -362,6 +364,7 @@ class Bot(object):
                     self.teamspeak.tsStart()
 
                 if now.hour == 13 and now.minute == 37:
+                    subprocess.call(["rm", "-rf", "cache/*.mp4"], stdout=subprocess.PIPE)
                     self.bot.sendMessage(self.otherId, "1337")
                 time.sleep(60)
 
