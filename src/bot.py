@@ -252,7 +252,7 @@ class Bot(object):
                             duration -= 40
                         if duration > 0:
                             durString = str(duration / 100) + ":" + str(duration % 100)
-                            begString = str(num1 / 100) + ":" + str(num2 % 100)
+                            begString = str(num1 / 100) + ":" + str(num1 % 100)
                             if len(args) > 4 and "audio" in args[4]:
                                 subprocess.call(["./youtube-cut.sh", args[1], begString, durString, "-a"], stdout=subprocess.PIPE)
                             else:
