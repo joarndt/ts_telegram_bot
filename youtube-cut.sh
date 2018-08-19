@@ -16,4 +16,5 @@ if [[ ! -f $filename ]]; then
 fi
 	
 ffmpeg -n -i $filename -ss $2 -c copy -to $3 "cache/${outputname}.mp4"
-ffmpeg -err_detect ignore_err -i "cache/${outputname}.mp4" -c copy "cache/${outputname}.mp4"
+ffmpeg -err_detect ignore_err -i "cache/${outputname}.mp4" -c copy "cache/${outputname}fixed.mp4"
+rm "cache/${outputname}.mp4"
