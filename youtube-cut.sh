@@ -15,4 +15,5 @@ if [[ ! -f $filename ]]; then
 	youtube-dl -f $audio $1 -o $filename
 fi
 	
-ffmpeg -n -ss $2 -i $filename -c copy -t $3 "cache/${outputname}.mp4"
+ffmpeg -n -i $filename -ss $2 -c copy -to $3 "cache/${outputname}.mp4"
+ffmpeg -err_detect ignore_err -i "cache/${outputname}.mp4" -c copy "cache/${outputname}.mp4"

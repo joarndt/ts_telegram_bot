@@ -246,19 +246,13 @@ class Bot(object):
                 if self.isNumber(args[2]) and self.isNumber(args[3]):
                     num1 = int(args[2])
                     num2 = int(args[3])
-                    if num1 / 100 < 60 and num1 % 100 < 60 and num2 / 100 < 60 and num2 % 100 < 60:
-                        duration = num2 - num1
-                        if num1 % 100 > num2 % 100:
-                            duration -= 40
-                        if duration > 0:
-                            durString = str(duration / 100) + ":" + str(duration % 100)
-                            begString = str(num1 / 100) + ":" + str(num1 % 100)
-                            print durString
-                            print begString
-                            if len(args) > 4 and "audio" in args[4]:
-                                subprocess.call(["./youtube-cut.sh", args[1], begString, durString, "-a"], stdout=subprocess.PIPE)
-                            else:
-                                subprocess.call(["./youtube-cut.sh", args[1], begString, durString], stdout=subprocess.PIPE)
+                    if num1 / 100 < 60 and num1 % 100 < 60 and num2 / 100 < 60 and num2 % 100 < 60 and num1 < num2:
+                        num2String = str(num2 / 100) + ":" + str(num2 % 100)
+                        num1String = str(num1 / 100) + ":" + str(num1 % 100)
+                        if len(args) > 4 and "audio" in args[4]:
+                            subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String, "-a"], stdout=subprocess.PIPE)
+                        else:
+                            subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String], stdout=subprocess.PIPE)
             self.sendVideo(self.otherId, "")
 
 
