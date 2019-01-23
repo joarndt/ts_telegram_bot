@@ -258,7 +258,6 @@ class Bot(object):
 
     def handleLinks(self, chat_id, msg):
         message = ""
-        send = False
         video = False
         for x in msg["text"].split(' '):
             if self.isValidUrl(x):
@@ -280,17 +279,12 @@ class Bot(object):
                     self.convert(x)
                     video = True
                 elif x != "":
-                    send = True
                     message += x + " "
-            elif x != "":
-                send = True
-                message += x + " "
         if video:
             if message != "":
                 message = self.getUsername(msg) + ": " + message
             self.sendVideo(chat_id, message)
-        elif send:
-            self.bot.sendMessage(chat_id, message)
+
 
     def convert(self, link=""):
         subprocess.call(["./convert.sh", link], stdout=subprocess.PIPE)
