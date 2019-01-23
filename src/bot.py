@@ -263,22 +263,27 @@ class Bot(object):
         for x in msg["text"].split(' '):
             if self.isValidUrl(x):
                 if "i.imgur.com" in x and ".gifv" in x:
-                    message += x.replace(".gifv", ".mp4") + " "
-                    send = True
+                    self.convert(x)
+                    video = True
+
                 elif "redd.it" in x or "reddit.com" in x:
                     text = self.parseUrl(x, "https://[^\"]*DASH_600_K")
-                    if text != "": send = True
-                    message += text
+                    if text != "":
+                        self.convert(text)
+                        video = True
                 elif "gfycat.com" in x:
                     text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
-                    if text != "": send = True
-                    message += text
+                    if text != "":
+                        video = True
+                        self.convert(text)
                 elif ".webm" in x:
                     self.convert(x)
                     video = True
-                else:
+                elif x != "":
+                    send = True
                     message += x + " "
-            else:
+            elif x != "":
+                send = True
                 message += x + " "
         if video:
             if message != "":
@@ -347,6 +352,7 @@ class Bot(object):
                 now = datetime.today()
 
                 if now.hour == 8 and now.minute == 0:
+                    subprocess.call(["rm", "-rf", "cache/*"], stdout=subprocess.PIPE)
                     for values in self.data.readBirthdays().itervalues():
                         for part in values:
                             part.wishHappyBirthday(self.bot, self.otherId)
@@ -357,9 +363,6 @@ class Bot(object):
                 if now.hour == 18 and now.minute == 0 and not self.teamspeak.getTsRunning():
                     self.teamspeak.tsStart()
 
-                if now.hour == 13 and now.minute == 37:
-                    subprocess.call(["rm", "-rf", "cache/*.mp4"], stdout=subprocess.PIPE)
-                    self.bot.sendMessage(self.otherId, "1337")
                 time.sleep(60)
 
             except Exception:
