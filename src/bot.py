@@ -103,18 +103,18 @@ class Bot(object):
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
                 elif com == '/yt':
                     self.youtubeCut(args)
+                    self.sendVideo(self.seconId, "")
                 else:
                     self.handleLinks(self.seconId, msg)
-                    self.handleLinks(self.otherId, msg)
 
             # Handle other chats
             elif chat_id == self.otherId or chat_id == self.seconId:
 
                 if com == '/quotes':
                     if len(args) == 2 and self.isNumber(args[1]):
-                        self.printQuotes(self.data.readQuotes(), int(args[1]))
+                        self.printQuotes(self.data.readQuotes(), int(args[1]), chat_id)
                     elif len(args) == 1:
-                        self.printQuotes(self.data.readQuotes())
+                        self.printQuotes(self.data.readQuotes(), chat_id = chat_id)
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /quotes YEAR")
 
@@ -137,7 +137,7 @@ class Bot(object):
                 elif com == '/deletequote':
                     quotes = self.data.readQuotes()
                     if len(args) == 1:
-                        self.printQuotes(quotes, numbers=True)
+                        self.printQuotes(quotes, numbers=True, chat_id = chat_id)
                         self.bot.sendMessage(chat_id, "Use following syntax /deletequote QUOTE_ID")
 
                     elif len(args) == 2:
@@ -152,7 +152,7 @@ class Bot(object):
 
                 if com == '/birthdays':
                     if len(args) == 1:
-                        self.printBirthdays(self.data.readBirthdays())
+                        self.printBirthdays(self.data.readBirthdays(), chat_id = chat_id)
                     else:
                         self.bot.sendMessage(chat_id, "only use following syntax: /birthdays")
 
@@ -171,7 +171,7 @@ class Bot(object):
                 elif com == '/deletebirthday':
                     birthdays = self.data.readBirthdays()
                     if len(args) == 1:
-                        self.printBirthdays(birthdays, numbers=True)
+                        self.printBirthdays(birthdays, numbers=True, chat_id = chat_id)
                         self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
 
                     elif len(args) == 2:
@@ -195,9 +195,10 @@ class Bot(object):
             elif self.groupId != chat_id:
                 if com == '/yt':
                     self.youtubeCut(args)
+                    self.sendVideo(self.seconId, "")
                 else:
                     self.handleLinks(self.seconId, msg)
-                    self.handleLinks(self.otherId, msg)
+
 
 
             # quitting teamspeak
@@ -256,7 +257,6 @@ class Bot(object):
                             subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String, "-a"], stdout=subprocess.PIPE)
                         else:
                             subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String], stdout=subprocess.PIPE)
-            self.sendVideo(self.otherId, "")
 
 
     def handleLinks(self, chat_id, msg):
@@ -309,21 +309,21 @@ class Bot(object):
         return (f for f in listdir(directory) if f.endswith('.' + extension))
 
     # print all birthdays trust me
-    def printBirthdays(self, birthdays, numbers=False):
+    def printBirthdays(self, birthdays, numbers=False, chat_id = 0):
         num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
         string = reduce(lambda x, y: x + y, map(num, enumerate(reduce(lambda x, y: x + y, birthdays.values(), []))), "")
         string += "No birthdays saved yet." if string == "" else ""
 
-        self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
+        self.bot.sendMessage(chat_id, string, parse_mode="Markdown")
 
     # print all Quotes trust me
-    def printQuotes(self, quotes, year=None, numbers=False):
+    def printQuotes(self, quotes, year=None, numbers=False, chat_id = 0):
         num = lambda x: "#" + str(x[0]) + " " + str(x[1]) + "\n" if numbers else str(x[1]) + "\n"
         qlist = quotes[year] if year is not None and year in quotes else reduce(lambda x, y: x + y, quotes.values(), [])
         string = reduce(lambda x, y: x + y, map(num, enumerate(qlist)), "")
         string += ("Quotes don't exist" + (" in " + str(year) if year is None else ""))if string == "" else ""
 
-        self.bot.sendMessage(self.otherId, string, parse_mode="Markdown")
+        self.bot.sendMessage(chat_id, string, parse_mode="Markdown")
 
     def isNumber(self, number):
         try:
@@ -354,7 +354,7 @@ class Bot(object):
                     subprocess.call(["rm", "-rf", "cache/*"], stdout=subprocess.PIPE)
                     for values in self.data.readBirthdays().itervalues():
                         for part in values:
-                            part.wishHappyBirthday(self.bot, self.otherId)
+                            part.wishHappyBirthday(self.bot, self.seconId)
 
                 if not(self.groupId == "0") and int(now.hour) < 18:
                     self.teamspeak.autoQuit()
