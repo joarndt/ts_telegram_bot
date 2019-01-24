@@ -52,6 +52,7 @@ class Bot(object):
         self.groupId = self.data.getChatId()
         self.adminId = self.data.getAdminId()
         self.otherId = self.data.getOtherId()
+        self.seconId = 0
         self.initTeamspeak(self.data.getChatId())
 
         # send startin message to admin
@@ -72,6 +73,7 @@ class Bot(object):
 
         # checks for textmessage
         if 'text' in msg:
+            print msg['text'] + " " + chat_id
 
             args = msg['text'].split(' ')
             com = msg['text'].split(' ')[0].split('@')[0]
