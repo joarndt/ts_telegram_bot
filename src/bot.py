@@ -73,7 +73,7 @@ class Bot(object):
 
         # checks for textmessage
         if 'text' in msg:
-            print msg['text'] + " " + chat_id
+            print msg['text'] + " " + str(chat_id)
 
             args = msg['text'].split(' ')
             com = msg['text'].split(' ')[0].split('@')[0]
