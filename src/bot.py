@@ -265,7 +265,7 @@ class Bot(object):
         for x in msg["text"].split(' '):
             if self.isValidUrl(x):
                 if "i.imgur.com" in x and ".gifv" in x:
-                    self.convert(x)
+                    self.convert(x.replace(".gifv", ".mp4"))
                     video = True
 
                 elif "redd.it" in x or "reddit.com" in x:
