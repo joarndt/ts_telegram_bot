@@ -278,8 +278,10 @@ class Bot(object):
                 elif ".webm" in x:
                     self.convert(x)
                     video = True
-                elif x != "":
+                else:
                     message += x + " "
+            else:
+                message += x + " "
         if video:
             if message != "":
                 message = self.getUsername(msg) + ": " + message
