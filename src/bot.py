@@ -102,8 +102,7 @@ class Bot(object):
                     subprocess.Popen(['killall', 'ts3client_linux_amd64'], stdout=subprocess.PIPE)
                     subprocess.Popen(['killall', 'python', 'python2.7', 'python2'], stdout=subprocess.PIPE)
                 elif com == '/yt':
-                    self.youtubeCut(args)
-                    self.sendVideo(self.seconId, "")
+                    self.youtubeCut(args, self.seconId)
                 else:
                     self.handleLinks(self.seconId, msg)
 
@@ -184,9 +183,7 @@ class Bot(object):
                         self.bot.sendMessage(chat_id, "Use following syntax /deletebirthday BIRTHDAY_ID")
                         self.bot.sendMessage(chat_id, "or /deletebirthday for a list of Message IDS ")
                 elif com == '/yt':
-                    self.youtubeCut(args)
-
-
+                    self.youtubeCut(args, chat_id)
                 else:
                     self.handleLinks(chat_id, msg)
 
@@ -194,8 +191,7 @@ class Bot(object):
             # handle teamspeakchat
             elif self.groupId != chat_id:
                 if com == '/yt':
-                    self.youtubeCut(args)
-                    self.sendVideo(self.seconId, "")
+                    self.youtubeCut(args, self.seconId)
                 else:
                     self.handleLinks(self.seconId, msg)
 
@@ -244,8 +240,8 @@ class Bot(object):
                         )
 
 
-    def youtubeCut(self, args):
-        if len(args) >= 4:
+    def youtubeCut(self, args, chat_id):
+        if len(args) == 4 or len(args) == 5:
             if "youtube" in args[1] or "youtu.be" in args[1]:
                 if self.isNumber(args[2]) and self.isNumber(args[3]):
                     num1 = int(args[2])
@@ -253,10 +249,27 @@ class Bot(object):
                     if num1 / 100 < 60 and num1 % 100 < 60 and num2 / 100 < 60 and num2 % 100 < 60 and num1 < num2:
                         num2String = str(num2 / 100) + ":" + str(num2 % 100)
                         num1String = str(num1 / 100) + ":" + str(num1 % 100)
-                        if len(args) > 4 and "audio" in args[4]:
-                            subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String, "-a"], stdout=subprocess.PIPE)
+                        if len(args) == 5 and "audio" in args[4]:
+                            subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String, "-a"],
+                                            stdout=subprocess.PIPE)
                         else:
-                            subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String], stdout=subprocess.PIPE)
+                            subprocess.call(["./youtube-cut.sh", args[1], num1String, num2String],
+                                            stdout=subprocess.PIPE)
+                        self.sendVideo(chat_id, "")
+                    else:
+                        self.bot.sendMessage(chat_id, "please use numberformat MMSS < MMSS \n"
+                                                      "for example: 4039 5959")
+                else:
+                    self.bot.sendMessage(chat_id, "please use numberformat MMSS < MMSS \n"
+                                                  "for example: 4039 5959")
+            else:
+                self.bot.sendMessage(chat_id, "please use a valid youtube URL")
+        else:
+            self.bot.sendMessage(chat_id, "please use following Syntax /yt YOUTUBE_URL MMSS MMSS audio \n"
+                                          "or this: /yt YOUTUBE_URL MMSS MMSS")
+
+
+
 
 
     def handleLinks(self, chat_id, msg):
