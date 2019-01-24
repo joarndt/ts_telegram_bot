@@ -52,7 +52,7 @@ class Bot(object):
         self.groupId = self.data.getChatId()
         self.adminId = self.data.getAdminId()
         self.otherId = self.data.getOtherId()
-        self.seconId = 0
+        self.seconId = -328961411
         self.initTeamspeak(self.data.getChatId())
 
         # send startin message to admin
@@ -73,7 +73,6 @@ class Bot(object):
 
         # checks for textmessage
         if 'text' in msg:
-            print msg['text'] + " " + str(chat_id)
 
             args = msg['text'].split(' ')
             com = msg['text'].split(' ')[0].split('@')[0]
@@ -105,10 +104,11 @@ class Bot(object):
                 elif com == '/yt':
                     self.youtubeCut(args)
                 else:
+                    self.handleLinks(self.seconId, msg)
                     self.handleLinks(self.otherId, msg)
 
             # Handle other chats
-            elif chat_id == self.otherId:
+            elif chat_id == self.otherId or chat_id == self.seconId:
 
                 if com == '/quotes':
                     if len(args) == 2 and self.isNumber(args[1]):
@@ -188,7 +188,7 @@ class Bot(object):
 
 
                 else:
-                    self.handleLinks(self.otherId, msg)
+                    self.handleLinks(chat_id, msg)
 
 
             # handle teamspeakchat
@@ -196,6 +196,7 @@ class Bot(object):
                 if com == '/yt':
                     self.youtubeCut(args)
                 else:
+                    self.handleLinks(self.seconId, msg)
                     self.handleLinks(self.otherId, msg)
 
 
