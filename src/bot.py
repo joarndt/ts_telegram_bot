@@ -282,7 +282,7 @@ class Bot(object):
                     video = True
 
                 elif "redd.it" in x or "reddit.com" in x:
-                    text = self.parseUrl(x, "https://[^\"]*DASH_600_K")
+                    text = self.parseUrl(x, "scrubberThumbSource\":\"https://[^\"]", 22)
                     if text != "":
                         self.convert(text)
                         video = True
