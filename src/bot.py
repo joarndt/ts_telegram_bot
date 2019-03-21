@@ -285,7 +285,7 @@ class Bot(object):
                 elif "redd.it" in x or "reddit.com" in x:
                     text = self.parseUrl(x, "scrubberThumbSource\":\"https://[^\"]*", 22)
                     if text != "":
-                        message += text + ".mp4 "
+                        message += text
                         url = True
                 elif "gfycat.com" in x:
                     text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
