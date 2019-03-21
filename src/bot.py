@@ -274,6 +274,7 @@ class Bot(object):
 
     def handleLinks(self, chat_id, msg):
         message = ""
+        url = False
         video = False
         for x in msg["text"].split(' '):
             if self.isValidUrl(x):
@@ -284,8 +285,8 @@ class Bot(object):
                 elif "redd.it" in x or "reddit.com" in x:
                     text = self.parseUrl(x, "scrubberThumbSource\":\"https://[^\"]*", 22)
                     if text != "":
-                        self.convert(text)
-                        video = True
+                        message += text + ".mp4 "
+                        url = True
                 elif "gfycat.com" in x:
                     text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
                     if text != "":
@@ -302,6 +303,9 @@ class Bot(object):
             if message != "":
                 message = self.getUsername(msg) + ": " + message
             self.sendVideo(chat_id, message)
+        if url:
+            self.bot.sendMessage(chat_id, message)
+
 
 
     def convert(self, link=""):
