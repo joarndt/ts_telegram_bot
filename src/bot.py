@@ -283,7 +283,7 @@ class Bot(object):
                     video = True
 
                 elif "redd.it" in x or "reddit.com" in x:
-                    text = self.parseUrl(x, "scrubberThumbSource\":\"https://[^\"]*", 22)
+                    text = self.getRedditVideo(x)
                     if text != "":
                         message += text
                         url = True
@@ -306,6 +306,20 @@ class Bot(object):
         if url:
             self.bot.sendMessage(chat_id, message)
 
+    def getRedditVideo(self, url, audio=True):
+        try:
+            regex = re.compile("fallback_url\": \"https://[^\"]*")
+            if url.endswith("/"):
+                url = url[:-1]
+            url += ".json"
+            hdr = {'User-Agent': "Telegrambot which converts redditlinks to directlinks"}
+            req = urllib2.Request(url, headers=hdr)
+            strings = regex.findall(urllib2.urlopen(req).read())
+            if len(strings) > 0:
+                return strings[0][16:] + " "
+        except Exception:
+            self.logger.debug(Exception)
+        return ""
 
 
     def convert(self, link=""):
