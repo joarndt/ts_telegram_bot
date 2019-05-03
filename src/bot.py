@@ -9,10 +9,11 @@ import urllib2
 import re
 import telepot
 from telepot.loop import MessageLoop
-from operator import sub
+import hashlib
 import src.tsclient.tsclient as ts
 import logging
 import subprocess
+import requests
 
 
 # Telegram bot class
@@ -287,6 +288,8 @@ class Bot(object):
                     if text != "":
                         message += text
                         url = True
+                    else:
+                        video = True
                 elif "gfycat.com" in x:
                     text = self.parseUrl(x, 'og:video:secure_url.*-mobile.mp4', 30)
                     if text != "":
@@ -309,14 +312,19 @@ class Bot(object):
     def getRedditVideo(self, url, audio=True):
         try:
             regex = re.compile("fallback_url\": \"https://[^\"]*")
-            if url.endswith("/"):
-                url = url[:-1]
-            url += ".json"
+            session = requests.Session()  # so connections are recycled
+            url = session.head(url, allow_redirects=True).url.strip("/") + ".json"
             hdr = {'User-Agent': "Telegrambot which converts redditlinks to directlinks"}
             req = urllib2.Request(url, headers=hdr)
             strings = regex.findall(urllib2.urlopen(req).read())
             if len(strings) > 0:
-                return strings[0][16:] + " "
+                video = strings[0][16:]
+                audio = re.sub("DASH_[^\"]*fallback", 'audio', video)
+                name = "cache/" + hashlib.sha224(video).hexdigest() + ".mp4"
+                if session.head(audio).status_code == 200:
+                    subprocess.call(["ffmpeg", "-i", video, "-i", audio, name], stdout=subprocess.PIPE)
+                else:
+                    return video
         except Exception:
             self.logger.debug(Exception)
         return ""
